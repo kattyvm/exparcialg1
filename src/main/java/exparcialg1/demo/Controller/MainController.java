@@ -11,6 +11,6 @@ public class MainController {
 
     @GetMapping(value = {"/{page}"})
     public String index(@PathVariable String page){
-        return page;
+        return "donpepe/"+page;
     }
 }
