@@ -28,7 +28,6 @@ public class UsuariosEntity {
     @NotBlank(message = "Ingrese una direccion de correo electronico.")
     @Column(nullable = false)
     private String correo;
-    @Size(max = 10, message = "Ingrese máximo 8 caracteres y 2 digitos.")
     @NotBlank(message = "Ingrese una contraseña.")
     @Column(nullable = false)
     private String pwd;
