@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="navbar/navbar.html ::cabecera(title='Lista de Gestores')">
+    </head>
+    <body>
+
+        <!--div th:replace="navbar/navbar.html :: preloader"></div-->
+        <div th:replace="navbar/navbar.html :: topbar"></div>
+
+        <div class="container">
+
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-900">Administración de Gestores</h1>
+                <button type="button"
+                        class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                        class="fas fa-user-plus fa-sm text-white-50"></i> Registrar Gestor
+                </button>
+            </div>
+
+            <p class="mb-4">Aquí puedes administrar los gestores de la Tienda Don Pepe.
+            </p>
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold ">Lista de Gestores</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover"  width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>DNI</th>
+                                <th>Correo</th>
+                                <th>Editar/Borrar</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>#</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>DNI</th>
+                                <th>Correo</th>
+                                <th>Editar/Borrar</th>
+                            </tr>
+                        </tfoot>
+
+                        <tbody>
+                            <tr th:each="gestor, i : ${lista}">
+                                <td th:text="${i.index +1}"></td>
+                                <td th:text="${gestor.nombre}"></td>
+                                <td th:text="${gestor.apellido}">
+                                <td th:text="${gestor.dni}"></td>
+                                <td th:text="${gestor.correo}">-</td>
+                                <td>
+                                    <button class="btn btn-datatable btn-icon btn-primary mr-2"><i class="fa fa-edit"></i></button>
+                                    <button class="btn btn-datatable btn-icon btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        </div>
+
+
+        <div th:replace="navbar/navbar.html :: footer"></div>
+
+        <div th:replace="navbar/navbar.html:: jscript"></div>
+    </body>
+</html>

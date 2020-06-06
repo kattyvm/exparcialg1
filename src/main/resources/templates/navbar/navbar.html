@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head th:fragment="cabecera(title)">
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -67,16 +68,16 @@
                                     <ul id="navigation">
                                         <li><a th:href="@{/index.html}">Productos</a></li>
                                         <li><a th:href="@{/shop.html}">Tu Carrito</a></li>
-                                        <li><a th:href="@{/about.html}">Tus Pedidos</a></li>
-                                        <li><a th:href="@{/gestor/listaProdGestion/}">Gestión de Productos</a>
+                                        <li sec:authorize="isAuthenticated()"><a th:href="@{/about.html}">Tus Pedidos</a></li>
+                                        <li sec:authorize="hasAuthority('Gestor')"><a th:href="@{/gestor/listaProdGestion/}">Gestión de Productos</a>
                                         </li>
-                                        <li><a th:href="@{/blog.html}">Estadísticas</a>
+                                        <li sec:authorize="hasAuthority('Gestor')"><a th:href="@{/blog.html}">Estadísticas</a>
                                             <ul class="submenu">
                                                 <li><a th:href="@{/blog.html}">Blog</a></li>
                                                 <li><a th:href="@{/blog-details.html}">Blog Details</a></li>
                                             </ul>
                                         </li>
-                                        <li><a th:href="@{/#}">Gestores</a>
+                                        <li sec:authorize="hasAuthority('Administrador')"><a th:href="@{/admin}">Gestores</a>
                                             <ul class="submenu">
                                                 <li><a th:href="@{/login.html}">Login</a></li>
                                                 <li><a th:href="@{/cart.html}">Cart</a></li>
@@ -92,13 +93,19 @@
                             <!-- Header Right -->
                             <div class="header-right">
                                 <ul>
+
                                     <li>
-                                        <div class="nav-search search-switch">
-                                            <span class="flaticon-search"></span>
+                                        <div sec:authorize="isAnonymous()" class="form-inline my-2 my-lg-0">
+                                            <a class="nav-link" style="color: #1b1e21" th:href="@{/loginForm}"><span class="flaticon-user"></span>Iniciar Sesión</a>
                                         </div>
+                                        <div sec:authorize="isAuthenticated()" class="form-inline my-2 my-lg-0">
+                                            <span th:text="|${session.usuario.nombre} ${session.usuario.apellido}|"></span>
+                                            <form th:action="@{/logout}" method="post">
+                                                <input class="btn genric-btn danger circle" type="submit" value="(Cerrar Sesión)">
+                                            </form>
+                                        </div>
+
                                     </li>
-                                    <li><a th:href="@{/login.html}"><span class="flaticon-user"></span></a></li>
-                                    <li >
                                         <span class="num" th:if="${num!=0}" th:text="${num}">3</span>
                                         <a  th:href="@{/cart.html}"><span
                                             class="flaticon-shopping-cart"></span></a>
