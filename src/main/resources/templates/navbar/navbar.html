@@ -19,6 +19,21 @@
         <link rel="stylesheet" th:href="@{/assets/css/slick.css}">
         <link rel="stylesheet" th:href="@{/assets/css/nice-select.css}">
         <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+        
+        <style>
+            
+            
+            .header-area .main-header .menu-wrapper .header-right ul li span.num{
+                position: relative;
+                top: -17px;
+                right: -51px;
+                font-size: 11px;
+                padding: 2px 5px;
+                border-radius: 50%;
+                background: red;
+                color: white;
+            }
+        </style>
     </head>
     <body>
         
@@ -36,7 +51,7 @@
         <!-- Preloader Start -->
         
         
-        <header th:fragment="topbar">
+        <header th:fragment="topbar(num)">
             <!-- Header Start -->
             <div class="header-area">
                 <div class="main-header header-sticky">
@@ -87,7 +102,11 @@
                                         </div>
                                     </li>
                                     <li><a th:href="@{/login.html}"><span class="flaticon-user"></span></a></li>
-                                    <li><a th:href="@{/cart.html}"><span class="flaticon-shopping-cart"></span></a></li>
+                                    <li >
+                                        <span class="num" th:if="${num!=0}" th:text="${num}">3</span>
+                                        <a  th:href="@{/cart.html}"><span
+                                            class="flaticon-shopping-cart"></span></a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
