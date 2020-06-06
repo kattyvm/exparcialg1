@@ -22,7 +22,7 @@ public class GestoresController {
     @Autowired
     ProductosRepository productosRepository;
 
-    @GetMapping(value ="listaProdDispPaginaPrincipal")
+    @GetMapping(value = {"listaProdDispPaginaPrincipal","/"})
     public String listaProdDispGestion(Model model){
         model.addAttribute("listaProductosDisponibles",productosRepository.findAll());
         return "donpepe/index";
