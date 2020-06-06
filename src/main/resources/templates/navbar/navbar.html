@@ -24,10 +24,10 @@
         <style>
             
             
-            .header-area .main-header .menu-wrapper .header-right ul li span.num{
+            .header-area .main-header .menu-wrapper .header-right ul li span.num {
                 position: relative;
                 top: -17px;
-                right: -51px;
+                right: 2px;
                 font-size: 11px;
                 padding: 2px 5px;
                 border-radius: 50%;
@@ -44,7 +44,7 @@
                 <div class="preloader-inner position-relative">
                     <div class="preloader-circle"></div>
                     <div class="preloader-img pere-text">
-                        <img src="assets/img/logo/logo.png" alt="">
+                        <img th:src="@{assets/img/logo/logo.png}" alt="">
                     </div>
                 </div>
             </div>
@@ -60,16 +60,18 @@
                         <div class="menu-wrapper">
                             <!-- Logo -->
                             <div class="logo">
-                                <a th:href="@{/index.html}"><img th:src="@{/assets/img/logo/logo.png}" alt=""></a>
+                                <a th:href="@{/}"> <img th:src="@{/assets/img/logo/logo.png}" alt=""></a>
                             </div>
                             <!-- Main-menu -->
                             <div class="main-menu d-none d-lg-block">
                                 <nav>
                                     <ul id="navigation">
-                                        <li><a th:href="@{/index.html}">Productos</a></li>
+                                        <li><a th:href="@{/}">Productos</a></li>
                                         <li><a th:href="@{/shop.html}">Tu Carrito</a></li>
-                                        <li sec:authorize="isAuthenticated()"><a th:href="@{/about.html}">Tus Pedidos</a></li>
-                                        <li sec:authorize="hasAuthority('Gestor')"><a th:href="@{/gestor/listaProdGestion/}">Gestión de Productos</a>
+                                        <li sec:authorize="isAuthenticated()"><a th:href="@{/about.html}">Tus
+                                            Pedidos</a></li>
+                                        <li sec:authorize="hasAuthority('Gestor')"><a
+                                                th:href="@{/gestor/listaProdGestion/}">Gestión de Productos</a>
                                         </li>
                                         <li sec:authorize="hasAuthority('Gestor')"><a th:href="@{/blog.html}">Estadísticas</a>
                                             <ul class="submenu">
@@ -91,26 +93,37 @@
                                 </nav>
                             </div>
                             <!-- Header Right -->
-                            <div class="header-right">
-                                <ul>
-
-                                    <li>
-                                        <div sec:authorize="isAnonymous()" class="form-inline my-2 my-lg-0">
-                                            <a class="nav-link" style="color: #1b1e21" th:href="@{/loginForm}"><span class="flaticon-user"></span>Iniciar Sesión</a>
-                                        </div>
-                                        <div sec:authorize="isAuthenticated()" class="form-inline my-2 my-lg-0">
-                                            <span th:text="|${session.usuario.nombre} ${session.usuario.apellido}|"></span>
-                                            <form th:action="@{/logout}" method="post">
-                                                <input class="btn genric-btn danger circle" type="submit" value="(Cerrar Sesión)">
-                                            </form>
-                                        </div>
-
-                                    </li>
-                                        <span class="num" th:if="${num!=0}" th:text="${num}">3</span>
-                                        <a  th:href="@{/cart.html}"><span
-                                            class="flaticon-shopping-cart"></span></a>
-                                    </li>
-                                </ul>
+                            <div class="header-right row">
+                                <div sec:authorize="isAnonymous()" class="form-inline my-2 my-lg-0">
+                                    <ul>
+                                        <li>
+                                    <a  th:href="@{/loginForm}"><span
+                                            class="flaticon-user"><span>(Iniciar Sesión)</span></span></a>
+                                        </li>
+                                    </ul>
+                                    
+                                </div>
+                                <div sec:authorize="isAuthenticated()" class="form-inline my-2 my-lg-0">
+                                    <ul>
+                                        <li>
+            
+                                            <a th:href="@{/cart.html}"><span
+                                                    class="flaticon-shopping-cart"><span class="num"
+                                                                                         th:if="${num>0}"
+                                                                                         th:text="${num}">3</span><span
+                                                    th:text="|${session.usuario.nombre} ${session.usuario.apellido}|"></span></span></a>
+                                            
+                                        </li>
+                                    </ul>
+                                    <form th:action="@{/logout}" method="post">
+                                        <input class="genric-btn default circle" style="color: #1b1e21" type="submit"
+                                               value="(Cerrar Sesión)">
+                                    </form>
+                                    
+                                    
+                                </div>
+                            
+                            
                             </div>
                         </div>
                         <!-- Mobile Menu -->
