@@ -8,8 +8,8 @@
         </header>
         <div class="container mt-5">
             <h2>Lista de Productos</h2>
-            <a class="btn genric-btn info circle mb-4 float-md-right" th:href="@{'/gestor/nuevo'}">Nuevo Producto</a>
             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+            <div><a class="btn genric-btn info circle mb-4 float-md-right" th:href="@{'/gestor/formulario'}">Nuevo Producto</a></div>
             <table class="table">
                 <thead>
                     <tr>

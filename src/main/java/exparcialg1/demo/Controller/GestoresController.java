@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping(value = "/gestor")
@@ -34,8 +35,8 @@ public class GestoresController {
         return "gestor/listaProductos";
     }
 
-    @GetMapping(value = {"/nuevo"})
-    public String form(@ModelAttribute("producto") ProductosEntity producto, Model model) {
+    @GetMapping(value = {"/formulario"})
+    public String formulario(@ModelAttribute("producto") ProductosEntity producto, Model model) {
         return "gestor/formulario";
     }
 
@@ -55,14 +56,21 @@ public class GestoresController {
 
     @PostMapping("/guardar")
     public String guardarProducto(@ModelAttribute("producto") @Valid ProductosEntity producto,
-                          BindingResult bindingResult, @RequestParam("type") int type,
-                          RedirectAttributes attr, Model model) {
+                          BindingResult bindingResult, RedirectAttributes attr, Model model) {
+
+        if (!producto.getNombre().isEmpty()) {
+            if (Pattern.compile("[0-9]").matcher(producto.getNombre()).find()) {
+                bindingResult.rejectValue("nombre", "error.user", "No se permiten valores numéricos.");
+            }
+            if (producto.getNombre().trim().length() == 0) {
+                bindingResult.rejectValue("nombre", "error.user", "Ingrese color válido.");
+            }
+        }
 
         if(bindingResult.hasErrors()){
-            model.addAttribute("formtype",Integer.toString(type));
             model.addAttribute("listaProductosDisponibles", productosRepository.findAll());
-            model.addAttribute("msg", "ERROR");
-            return "gestor/listaProductos";
+            model.addAttribute("msg", "Error al ingresar los datos, verifique que los datos sean validos.");
+            return "gestor/formulario";
         }
         else {
             Optional<ProductosEntity> optProducto = productosRepository.findById(producto.getCodproducto());
