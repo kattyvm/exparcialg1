@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="navbar/navbar.html :: cabecera(title='Producto')">
+    <head th:replace="navbar/navbar.html :: cabecera(title='Lista Productos')">
     </head>
     <body>
 
         <header th:replace="navbar/navbar.html:: topbar(num=${0})">
         </header>
-        <div class="container">
+        <div class="container mt-5">
             <h2>Lista de Productos</h2>
-            <a class="btn btn-primary mt-4 mb-4" th:href="@{'/gestor/nuevo'}">Nuevo Producto</a>
+            <a class="btn genric-btn info circle mb-4 float-md-right" th:href="@{'/gestor/nuevo'}">Nuevo Producto</a>
             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
             <table class="table">
                 <thead>
@@ -34,10 +34,10 @@
                                 th:src="${p.foto}"
                                 alt="" height=100 width=100></td>
                         <td><a type="button" th:href="@{'/gestor/editar?id='+${p.codproducto}}"
-                               class="btn btn-datatable btn-icon btn-primary mr-2"><i
+                               class="btn genric-btn info circle"><i
                                 class="fa fa-edit"></i></a></td>
                         <td><a type="button" th:href="@{'/gestor/borrar?id=' + ${p.codproducto}}"
-                                    class="btn btn-datatable btn-icon btn-danger mr-2"><i
+                                    class="btn genric-btn danger circle"><i
                                 class="fas fa-trash-alt"></i></a></td>
 
                     </tr>

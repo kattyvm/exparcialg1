@@ -49,7 +49,7 @@ public class GestoresController {
             model.addAttribute("producto", producto);
             return "gestor/formulario";
         } else {
-            return "redirect:/listaProdGestion";
+            return "redirect:/gestor/listaProdGestion";
         }
     }
 
@@ -73,7 +73,7 @@ public class GestoresController {
                 attr.addFlashAttribute("msg", "Producto creado exitosamente");
             }
             productosRepository.save(producto);
-            return "redirect:/gestor/listaProdDispGestion";
+            return "redirect:/gestor/listaProdGestion";
         }
     }
 
