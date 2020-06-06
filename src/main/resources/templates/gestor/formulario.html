@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="navbar/navbar.html :: cabecera(title='Producto')">
+    </head>
+    <body>
+
+
+        <header th:replace="navbar/navbar.html:: topbar">
+        </header>
+
+
+
+        <!--? Search model Begin -->
+        <div class="search-model-box">
+            <div class="h-100 d-flex align-items-center justify-content-center">
+                <div class="search-close-btn">+</div>
+                <form class="search-model-form">
+                    <input type="text" id="search-input" placeholder="Searching key.....">
+                </form>
+            </div>
+        </div>
+        <!-- Search model end -->
+
+        <div th:replace="navbar/navbar.html:: jscript"></div>
+    </body>
+
+</html>
