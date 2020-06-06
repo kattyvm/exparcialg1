@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="navbar/navbar.html :: cabecera(title='Producto')">
+    </head>
+    <body>
+
+
+        <header th:replace="navbar/navbar.html:: topbar">
+        </header>
+        <div class="container">
+            <h2>Lista de Productos</h2>
+            <a class="btn btn-primary mt-4 mb-4" th:href="@{'/gestor/nuevo'}">Nuevo Producto</a>
+            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Descripcion</th>
+                        <th>Foto</th>
+                        <th>Editar</th>
+                        <th>Borrar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="p, i : ${listaProductos}">
+                        <td th:text="${p.codproducto}"></td>
+                        <td th:text="${p.nombre}"></td>
+                        <td th:text="${p.preciounitario}"></td>
+                        <td th:text="${p.stock}"></td>
+                        <td th:text="${p.descripcion}"></td>
+                        <td><img
+                                th:src="${p.foto}"
+                                alt="" height=100 width=100></td>
+                        <td><a type="button" th:href="@{'/gestor/editar?id='+${p.codproducto}}"
+                               class="btn btn-datatable btn-icon btn-primary mr-2"><i
+                                class="fa fa-edit"></i></a></td>
+                        <td><a type="button" th:href="@{'/gestor/borrar?id=' + ${p.codproducto}}"
+                                    class="btn btn-datatable btn-icon btn-danger mr-2"><i
+                                class="fas fa-trash-alt"></i></a></td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <!--? Search model Begin -->
+        <div class="search-model-box">
+            <div class="h-100 d-flex align-items-center justify-content-center">
+                <div class="search-close-btn">+</div>
+                <form class="search-model-form">
+                    <input type="text" id="search-input" placeholder="Searching key.....">
+                </form>
+            </div>
+        </div>
+        <!-- Search model end -->
+
+        <div th:replace="navbar/navbar.html:: jscript"></div>
+    </body>
+
+</html>
