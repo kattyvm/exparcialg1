@@ -44,4 +44,13 @@ public interface ProductosRepository extends JpaRepository<ProductosEntity,Strin
             "\n", nativeQuery = true)
     int obtenerCantprodvendidos();
 
+
+
+    @Query(value="SELECT * FROM productos \n" +
+            "    WHERE codproducto LIKE ?1 \n" +
+            "    OR nombre LIKE ?1 ", nativeQuery = true)
+    List<ProductosEntity> buscarProductosEntitiesByCodproductoOrNombre(String buscador);
+
+
+
 }

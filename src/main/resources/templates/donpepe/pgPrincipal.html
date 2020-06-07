@@ -21,10 +21,21 @@
                              role="alert"></div>
                         <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success py-1"
                              role="alert"></div>
+                        <div th:if="${msgEmpty != null}" th:text="${msgEmpty}" class="alert alert-warning py-1"
+                             role="alert"></div>
                         
                     </div>
                 </div>
-                <div th:each="prod: ${listProd}" th:if="${prod.stock>0}" class="whole-wrap">
+                <div class="whole-wrap">
+                    <div class="container mx-auto">
+                        <form method="post" th:action="@{/buscarProductos}">
+                            <input name="buscador" class="form-control mb-3" type="text" placeholder="Buscar por nombre o código"/>
+                        </form>
+                        <a th:if="${buscador!=null}" th:href="@{/}" class="btn btn-danger mt-4 mb-4" >Volver a mostrar la lista completa</a>
+                    </div>
+                </div>
+                <divth:if="${msgEmpty == null}">
+                <div  th:each="prod: ${listProd}" th:if="${prod.stock>0}" class="whole-wrap">
                     <div class="container mx-auto">
                         <div class="section-top-border">
                             <h3 class="mb-30" th:text="${prod.nombre}">Left Aligned</h3>
@@ -71,7 +82,7 @@
                         </div>
                     </div>
                 </div>
-                
+                </div>
                 
                 
             </section>

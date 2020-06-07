@@ -1,5 +1,6 @@
 package exparcialg1.demo.Controller;
 
+import exparcialg1.demo.Entity.PedidosEntity;
 import exparcialg1.demo.Entity.ProductosEntity;
 import exparcialg1.demo.Repository.ProductosRepository;
 import exparcialg1.demo.constantes.ProductoCarrito;
@@ -37,6 +38,24 @@ public class MainController {
         m.addAttribute("listProd", listProd);
         return "donpepe/pgPrincipal";
     }
+
+    @PostMapping(value = {"/buscarProductos"})
+    public String busca(Model m,@RequestParam("buscador") String buscador) {
+
+        String buscadorq="%"+buscador+"%";
+
+        List<ProductosEntity> listProd = productosRepository.buscarProductosEntitiesByCodproductoOrNombre(buscadorq);
+        if(listProd.size()==0){
+            m.addAttribute("msgEmpty", "No se encontraron resultados");
+        }
+        m.addAttribute("buscador", buscador);
+        m.addAttribute("path", "A0006I.jpg");
+        m.addAttribute("listProd", listProd);
+        return "donpepe/pgPrincipal";
+    }
+
+
+
     @GetMapping(value = {"/detalles"})
     public String detalles(@RequestParam("id") String id,Model m) {
 
