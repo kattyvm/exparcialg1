@@ -11,22 +11,25 @@
             <!--================login_part Area =================-->
             <section class="login_part ">
                 <div class="container">
+
+                    <div id="msg" th:if="${msg != null}" th:text="${msg}" class="alert alert-success py-1" role="alert"></div>
+
                     <div class="row align-items-center">
                         <div class="col-lg-6 col-md-6">
                             <div class="login_part_text text-center">
                                 <div class="login_part_text_iner">
-                                    <h2>New to our Shop?</h2>
-                                    <p>There are advances being made in science and technology
-                                        everyday, and a good example of this is the</p>
-                                    <a href="#" class="btn_3">Create an Account</a>
+                                    <h2>¿Nuevo en nuestra tienda?</h2>
+                                    <p>En la Tiendita de Don Pepe tenemos los mejores productos en todo el mercado,
+                                        así que para adquirirlos primero debes</p>
+                                    <a th:href="@{/register}" class="btn_3">Crear una Cuenta</a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6">
                             <div class="login_part_form">
                                 <div class="login_part_form_iner">
-                                    <h3>Welcome Back ! <br>
-                                        Please Sign in now</h3>
+                                    <h3>Bienvenido ! <br>
+                                        Inicia sesión ahora</h3>
 
                                     <form class="row contact_form" th:action="@{/processLogin}" method="post" novalidate="novalidate">
                                         <div class="col-md-12 form-group p_star">

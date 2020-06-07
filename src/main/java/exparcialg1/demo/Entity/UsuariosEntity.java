@@ -29,8 +29,9 @@ public class UsuariosEntity implements Serializable{
     @NotBlank(message = "Ingrese una direccion de correo electronico.")
     @Column(nullable = false)
     private String correo;
-    //@NotBlank(message = "Ingrese una contraseña.")
-    //@Column(nullable = false)
+    @NotBlank(message = "Ingrese una contraseña.")
+    @Size(min=8,max = 100)
+    @Column(nullable = false)
     private String pwd;
     @Column(nullable = false)
     private Boolean enabled;

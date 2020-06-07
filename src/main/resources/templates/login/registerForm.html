@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="navbar/navbar.html ::cabecera(title='Registro de Usuarios')">
+    </head>
+    <body>
+
+        <div th:replace="navbar/navbar.html :: topbar(num=${num})"></div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="d-sm-flex align-items-center justify-content-between mb-0 mt-5">
+                        <h1 class="h3 mb-4 text-gray-900">¡ Resgístrate !</h1>
+                    </div>
+
+                    <form method="post" th:action="@{/saveUsuario}" th:object="${usuario}"
+                          enctype="multipart/form-data">
+                        <input hidden type="text" class="form-control" th:field="*{idusuarios}">
+
+                        <div class="col-md-6 form-group p_star">
+                            <label class="col-form-label">Nombre:</label>
+                            <input type="text" class="form-control" th:field="*{nombre}">
+                            <div class="text-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">
+                                Error
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group p_star">
+                            <label class="col-form-label">Apellido:</label>
+                            <input type="text" class="form-control" th:field="*{apellido}">
+                            <div class="text-danger" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}">
+                                Error
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 form-group p_star">
+                            <label class="col-form-label">DNI:</label>
+                            <input type="text" class="form-control" th:field="*{dni}">
+                            <div class="text-danger" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}">Error</div>
+                        </div>
+
+                        <div class="row col-md-12 ">
+                            <div class="col-md-6 form-group p_star">
+                                <label class="col-form-label">Correo:</label>
+                                <input type="text" class="form-control" th:field="*{correo}">
+                                <div class="text-danger" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">
+                                    Error
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group p_star">
+                                <label class="col-form-label">Seleccione el dominio:</label>
+                                <select id="dominio" name="dominio" class="form-control">
+                                    <option name="1" value="1">@pucp.edu.pe</option>
+                                    <option name="2" value="2">@pucp.pe</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 form-group p_star">
+                            <label class="col-form-label">Contraseña:</label>
+                            <input type="password" class="form-control" th:field="*{pwd}">
+                            <div class="text-danger" th:if="${#fields.hasErrors('pwd')}" th:errors="*{pwd}">Error</div>
+                        </div>
+
+                        <div class="col-md-6 form-group p_star">
+                            <label class="col-form-label">Confirmar Contraseña:</label>
+                            <input type="password" class="form-control" name="pass" id="pass">
+                        </div>
+
+                        <div class="modal-footer">
+                            <a type="button" th:href="@{/loginForm}" class="btn genric-btn danger circle">Cancelar</a>
+                            <button type="submit" class="btn genric-btn danger circle"><a
+                                    style="color:white;text-decoration:none">Registrarse</a></button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

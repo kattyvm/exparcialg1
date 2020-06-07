@@ -1,5 +1,6 @@
 package exparcialg1.demo.Controller;
 
+import exparcialg1.demo.Entity.ProductosEntity;
 import exparcialg1.demo.Entity.RolesEntity;
 import exparcialg1.demo.Entity.UsuariosEntity;
 import exparcialg1.demo.Repository.UsuariosRepository;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -60,7 +63,6 @@ public class AdminController {
                 bindingResult.rejectValue("apellido", "error.user", "Ingrese un apellido válido.");
             }
         }
-        //List<UsuariosEntity> validarDni = usuariosRepository.findAll();
         if (usuarios.getDni()!=0) {
             if (usuarios.getDni() < 10000000) {
                 bindingResult.rejectValue("dni", "error.user", "Ingrese un DNI válido.");
@@ -68,9 +70,6 @@ public class AdminController {
             if (usuarios.getDni() > 99999999) {
                 bindingResult.rejectValue("dni", "error.user", "Ingrese un DNI válido.");
             }
-            //if(validarDni.contains(usuarios.getDni())){
-            //    bindingResult.rejectValue("dni","error.user","Este DNI ya existe");
-            //}
         }
         if (!usuarios.getCorreo().isEmpty()) {
             if (Pattern.compile("[@]").matcher(usuarios.getCorreo()).find()) {
@@ -81,6 +80,27 @@ public class AdminController {
             }
             if (usuarios.getCorreo().trim().length() == 0) {
                 bindingResult.rejectValue("correo", "error.user", "Ingrese un correo válido.");
+            }
+        }
+        List<UsuariosEntity> listUsuarios = usuariosRepository.findAll();
+        for (UsuariosEntity usu : listUsuarios) {
+            if (usu.getDni() == usuarios.getDni()) {
+                if (usuarios.getIdusuarios() == 0) {
+                    bindingResult.rejectValue("dni", "error.user", "Este DNI ya existe.");
+                } else {
+                    if (!(usu.getDni() == usuarios.getDni())) {
+                        bindingResult.rejectValue("dni", "error.user", "Este DNI ya existe.");
+                    }
+                }
+            }
+            if (usu.getCorreo().equals(usuarios.getCorreo())) {
+                if (usuarios.getIdusuarios() == 0) {
+                    bindingResult.rejectValue("correo", "error.user", "Este correo ya existe.");
+                } else {
+                    if (usu.getIdusuarios() != usuarios.getIdusuarios()) {
+                        bindingResult.rejectValue("correo", "error.user", "Este correo ya existe.");
+                    }
+                }
             }
         }
 
@@ -121,10 +141,11 @@ public class AdminController {
             usuarios.setEnabled(opt.get().getEnabled());
             usuarios.setRol(opt.get().getRol());
         }
-        usuariosRepository.save(usuarios);
+        //usuariosRepository.save(usuarios);
         //no funciona pero el query sí
-        //usuariosRepository.saveGestor(usuarios.getIdusuarios(),usuarios.getNombre(),usuarios.getApellido(),
-        //        usuarios.getDni(),usuarios.getCorreo(),usuarios.getEnabled(),usuarios.getRol().getIdroles());
+        usuariosRepository.saveGestor(usuarios.getIdusuarios(),usuarios.getNombre(),usuarios.getApellido(),
+                usuarios.getDni(),usuarios.getCorreo(),usuarios.getPwd(), usuarios.getEnabled(),usuarios.getRol().getIdroles());
+
         return "redirect:/admin/listGestor";
     }
 
