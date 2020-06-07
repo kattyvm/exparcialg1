@@ -37,7 +37,19 @@ public class MainController {
         m.addAttribute("listProd", listProd);
         return "donpepe/pgPrincipal";
     }
+    @GetMapping(value = {"/detalles"})
+    public String detalles(@RequestParam("id") String id,Model m) {
 
+        Optional<ProductosEntity> opt = productosRepository.findById(id);
+        if (!opt.isPresent()) {
+            return "redirect:/";
+        }
+        ProductosEntity prod= opt.get();
+        m.addAttribute("path", "A0006I.jpg");
+        m.addAttribute("prod", prod);
+
+        return "donpepe/detalles";
+    }
 
 
 

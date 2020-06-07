@@ -1,10 +1,14 @@
 package exparcialg1.demo.Controller;
 
+import exparcialg1.demo.Entity.PedidohasproductoEntity;
 import exparcialg1.demo.Entity.PedidosEntity;
 import exparcialg1.demo.Entity.ProductosEntity;
+import exparcialg1.demo.Entity.UsuariosEntity;
+import exparcialg1.demo.Repository.PedidoHasProductoRepository;
 import exparcialg1.demo.Repository.PedidosRepository;
 import exparcialg1.demo.Repository.ProductosRepository;
 import exparcialg1.demo.Repository.UsuariosRepository;
+import exparcialg1.demo.constantes.PedhasProdID;
 import exparcialg1.demo.constantes.ProductoCarrito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +36,8 @@ public class UsuariosController {
     ProductosRepository productosRepository;
     @Autowired
     PedidosRepository pedidosRepository;
+    @Autowired
+    PedidoHasProductoRepository pedidoHasProductoRepository;
 
     @GetMapping(value = {"/"})
     public String index(Model m) {
@@ -88,7 +94,7 @@ public class UsuariosController {
     @GetMapping(value = {"/myCart"})
     public String viewCart(HttpSession session, Model m) {
         ArrayList<ProductoCarrito> cart = (ArrayList<ProductoCarrito>) session.getAttribute("cart");
-        if (cart.size()!=0) {
+        if (cart.size() != 0) {
             boolean validCart = validateCart(cart, session, m);
             m.addAttribute("path", "A0006I.jpg");
 
@@ -100,10 +106,9 @@ public class UsuariosController {
                 total = total.add(prodCart.getProductos().getPreciounitario().multiply(cant));
             }
             m.addAttribute("total", total);
-        }else{
+        } else {
             m.addAttribute("msgEmpty", "Ups! Parece que no tienes productos en tu carrito");
         }
-
 
 
         return "donpepe/myCart";
@@ -153,7 +158,15 @@ public class UsuariosController {
     }
 
     @GetMapping(value = {"/checkout"})
-    public String checkout() {
+    public String checkout(Model m, HttpSession session) {
+        ArrayList<ProductoCarrito> cart = (ArrayList<ProductoCarrito>) session.getAttribute("cart");
+        BigDecimal total = new BigDecimal(0);
+
+        for (ProductoCarrito prodCart : cart) {
+            BigDecimal cant = new BigDecimal(prodCart.getCantidad());
+            total = total.add(prodCart.getProductos().getPreciounitario().multiply(cant));
+        }
+        m.addAttribute("total", total);
 
         return "donpepe/credit";
     }
@@ -171,6 +184,9 @@ public class UsuariosController {
                 }
             }
         }
+        int numcart = (int)session.getAttribute("numcart");
+        numcart--;
+        session.setAttribute("numcart",numcart);
         session.setAttribute("cart", cart);
         att.addFlashAttribute("msgsuccess", "Producto borrado exitosamente");
         return "redirect:/usuario/myCart";
@@ -205,46 +221,38 @@ public class UsuariosController {
                 return "redirect:/usuario/myCart";
             }
 
-            PedidosEntity pedidosEntity = null;
-
+            PedidosEntity pedidosEntity = new PedidosEntity();
             LocalDateTime today = LocalDateTime.now();
-            String year = String.valueOf(today.getYear());
-            String month = String.valueOf(today.getMonth());
-            String day = String.valueOf(today.getDayOfMonth());
+            String codped = generacod(today);
+            pedidosEntity.setCodpedido(codped);
+            pedidosEntity.setUsuario((UsuariosEntity) session.getAttribute("usuario"));
+            pedidosEntity.setFecha(today);
 
+            BigDecimal total = new BigDecimal(0);
 
-            List<PedidosEntity> pedidosList = pedidosRepository.findAll();
-            int mayor=0;
-
-
-            for (PedidosEntity ped : pedidosList){
-                StringBuilder strNum = new StringBuilder();
-                char[] codarray = ped.getCodpedido().toCharArray();
-                for(int i=10;i<codarray.length;i++) {
-                    strNum.append(codarray[i]);
-                }
-                int codnum = Integer.parseInt(strNum.toString());
-                if (codnum>mayor){
-                    mayor=codnum;
-                }
+            for (ProductoCarrito prodCart : cart) {
+                BigDecimal cant = new BigDecimal(prodCart.getCantidad());
+                total = total.add(prodCart.getProductos().getPreciounitario().multiply(cant));
             }
+            pedidosEntity.setPreciototal(total);
+            pedidosRepository.save(pedidosEntity);
 
-            int codpednum=mayor+1;
-            String codpedstr=String.valueOf(codpednum);
-            String codped= "PE"+day+month+year+codpedstr;
-            System.out.println(codped);
-            System.out.println(codped);
-            System.out.println(codped);
-            System.out.println(codped);
-            System.out.println(codped);
-            System.out.println(codped);
-            System.out.println(codped);
-            System.out.println(codped);
-            System.out.println(codped);
-            System.out.println(codped);
-            System.out.println(codped);
-            System.out.println(codped);
-            System.out.println(codped);
+            Optional<PedidosEntity> opt = pedidosRepository.findById(pedidosEntity.getCodpedido());
+            PedidosEntity pedidoscreado=opt.get();
+            for (ProductoCarrito prodCart : cart) {
+                PedidohasproductoEntity pedhasprod=new PedidohasproductoEntity();
+                pedhasprod.setCantidad(prodCart.getCantidad());
+
+                BigDecimal multiply = prodCart.getProductos().getPreciounitario().multiply(new BigDecimal(prodCart.getCantidad()));
+                pedhasprod.setSubtotal(multiply);
+                PedhasProdID id=new PedhasProdID(pedidoscreado.getCodpedido(),prodCart.getProductos().getCodproducto());
+                pedhasprod.setId(id);
+                pedidoHasProductoRepository.save(pedhasprod);
+            }
+            ArrayList<ProductoCarrito> cartemp =new ArrayList<>();
+            session.setAttribute("cart",cartemp);
+            session.setAttribute("numcart",0);
+
         } catch (Exception e) {
             att.addFlashAttribute("msgerror", "Ups! Parece que la tarjeta no es válida");
             return "redirect:/usuario/checkout";
@@ -252,6 +260,46 @@ public class UsuariosController {
         return "redirect:/";
     }
 
+    private String generacod(LocalDateTime today) {
+
+        String year = String.valueOf(today.getYear());
+        int month = today.getMonthValue();
+        String monthstr1 = String.valueOf(month);
+        String monthstr;
+        if (month < 10) {
+            monthstr = "0" + monthstr1;
+        } else {
+            monthstr = monthstr1;
+        }
+        int day = today.getDayOfMonth();
+        String daystr1 = String.valueOf(day);
+        String daystr;
+        if (day < 10) {
+            daystr = "0" + daystr1;
+        } else {
+            daystr = daystr1;
+        }
+
+        List<PedidosEntity> pedidosList = pedidosRepository.findAll();
+        int mayor = 0;
+        for (PedidosEntity ped : pedidosList) {
+            StringBuilder strNum = new StringBuilder();
+            char[] codarray = ped.getCodpedido().toCharArray();
+            for (int i = 10; i < codarray.length; i++) {
+                strNum.append(codarray[i]);
+            }
+            int codnum = Integer.parseInt(strNum.toString());
+            if (codnum > mayor) {
+                mayor = codnum;
+            }
+        }
+
+        int codpednum = mayor + 1;
+        String codpedstr = String.valueOf(codpednum);
+        String codped = "PE" + daystr + monthstr + year + codpedstr;
+
+        return codped;
+    }
 
     private boolean validateCC(String ccstr) {
         char[] ccarray = ccstr.toCharArray();

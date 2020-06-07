@@ -16,10 +16,12 @@
             <section class="popular-items">
                 <div class="whole-wrap">
                     <div class="container mx-auto">
+                        <h1 class="mb-30" >Nuestros Productos</h1>
                         <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-danger py-1"
                              role="alert"></div>
                         <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success py-1"
                              role="alert"></div>
+                        
                     </div>
                 </div>
                 <div th:each="prod: ${listProd}" th:if="${prod.stock>0}" class="whole-wrap">
@@ -35,7 +37,7 @@
                                             <img th:src="@{${path!=null? '/images/' + path: ''}}" alt=""
                                                  class="mx-auto my-auto mh-100 img-fluid" style="display: block;">
                                             <div class="img-cap">
-                                                <a th:href="@{'/usuario/addCart?id='+${prod.codproducto}}"><span>Add to cart</span></a>
+                                                <a th:href="@{'/detalles?id=' + ${prod.codproducto}}"><span>Ver detalles</span></a>
                                             </div>
                                         
                                         </div>
@@ -51,7 +53,7 @@
                                 </div-->
                                 
                                 
-                                <div class="col-md-9 mt-sm-20">
+                                <div class="col-md-5 mt-sm-20">
                                     <label><b>Código: </b><span><label
                                             th:text="${prod.codproducto}"></label></span></label></br>
                                     <label><b>Precio unitario: </b><span><label> S/.</label><label
@@ -59,6 +61,12 @@
                                     <label><b>Stock: </b><span><label
                                             th:text="${prod.stock}"></label></span></label></br>
                                 </div>
+                                <div class="col-md-4 mt-sm-20">
+                                    <a class="btn genric-btn info circle mb-4 float-md-right" th:href="@{'/usuario/addCart?id='+${prod.codproducto}}"
+                                            >+ Añadir al carrito</a>
+                                </div>
+                                
+                                
                             </div>
                         </div>
                     </div>
@@ -216,21 +224,8 @@
                     <!-- End Nav Card -->
                 </div>
             </section>
-            <form method="POST"
-                  th:action="@{/save}"
-                  enctype="multipart/form-data">
-                <table>
-                    <tr>
-                        <td>Select a file to upload</td>
-                        <td><input type="file" name="file"/></td>
-                    </tr>
-                    <tr>
-                        <td><input type="submit" value="Submit"/></td>
-                    </tr>
-                </table>
-            </form>
+    
             
-            <td th:text="${msg}"></td>
         </main>
         <div th:replace="navbar/navbar.html:: footer"></div>
         

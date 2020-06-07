@@ -8,9 +8,9 @@
         </header>
         <main>
             
-            <!--? Preloader Start >
+            <!--? Preloader Start -->
             <div th:replace="navbar/navbar.html:: preloader"></div>
-            <================Cart Area =================-->
+            <!--================Cart Area =================-->
             
             <section class="checkout_area">
                 <div class="container">
@@ -25,6 +25,7 @@
                                      role="alert"></div>
                             </div>
                         </div>
+                        <h6 th:text="|Total a pagar: S./ ${total}|"></h6>
                         <p>
                             Ingrese su tarjeta:
                         </p>
