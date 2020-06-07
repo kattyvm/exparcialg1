@@ -11,9 +11,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.imageio.ImageIO;
 import javax.validation.Valid;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -62,8 +67,7 @@ public class GestoresController {
 
     @PostMapping("/guardar")
     public String guardarProducto(@ModelAttribute("producto") @Valid ProductosEntity producto,
-                                  BindingResult bindingResult, RedirectAttributes attr, Model model) {
-
+                                  BindingResult bindingResult, RedirectAttributes attr, Model model, @RequestParam("foto1") MultipartFile foto1) {
         if (!producto.getNombre().isEmpty()) {
             if (Pattern.compile("[0-9]").matcher(producto.getNombre()).find()) {
                 bindingResult.rejectValue("nombre", "error.user", "No se permiten valores numéricos.");
@@ -84,7 +88,7 @@ public class GestoresController {
         while (cad.length() < 4) {
             cad = "0" + cad;
         }
-
+        String codProducto =primero + cad + ultimo;
 
         for (ProductosEntity prodTienda : listProductos) {
 
@@ -112,7 +116,21 @@ public class GestoresController {
             if (optProducto.isPresent()) {
                 attr.addFlashAttribute("msg", "Producto actualizado exitosamente");
             } else {
-                producto.setCodproducto(primero + cad + ultimo);
+                producto.setCodproducto(codProducto);
+                try {
+                    String fotoname=codProducto + ".jpg";
+                    String path = "src/main/resources/images/" +fotoname;
+
+                    ByteArrayInputStream bis = new ByteArrayInputStream(foto1.getBytes());
+                    BufferedImage bImage2 = ImageIO.read(bis);
+                    ImageIO.write(bImage2, "jpg", new File(path));
+                    producto.setFoto(fotoname);
+                    model.addAttribute("msg", "Archivo subido");
+                } catch (Exception e) {
+                    model.addAttribute("msg", "Error con foto");
+                    bindingResult.rejectValue("foto", "error.user", "Error con foto");
+                    return "gestor/formulario";
+                }
                 attr.addFlashAttribute("msg", "Producto creado exitosamente");
             }
             productosRepository.save(producto);
@@ -125,7 +143,6 @@ public class GestoresController {
                                   @RequestParam("id") String id, RedirectAttributes attr) {
 
         List<PedidohasproductoEntity> listaPedidosPorProducto = pedidoHasProductoRepository.buscarPedidosPorProducto(id);
-
         if(listaPedidosPorProducto.isEmpty()){
             productosRepository.deleteById(id);
             attr.addFlashAttribute("msg", "Producto borrado exitosamente");
@@ -134,5 +151,4 @@ public class GestoresController {
         }
         return "redirect:/gestor/listaProdGestion";
     }
-
 }

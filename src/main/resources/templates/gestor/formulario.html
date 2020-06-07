@@ -42,9 +42,11 @@
                             <div class="text-danger" th:if="${#fields.hasErrors('descripcion')}"
                                  th:errors="*{descripcion}"></div>
                         </div>
-                        <div class="form-group" th:hidden="${producto.codproducto!=null&&producto.codproducto!=''}">
+                        <div class="form-group" th:if="${producto.codproducto!=null&&producto.codproducto!=''}">
                             <label>Foto:</label>
-                            <input type="file" th:field="*{foto}">
+                            <input type="file" name="foto1">
+                            <div class="text-danger" th:if="${#fields.hasErrors('foto')}"
+                                 th:errors="*{foto}"></div>
                         </div>
                     </div>
                     <div class="col-lg-5" >

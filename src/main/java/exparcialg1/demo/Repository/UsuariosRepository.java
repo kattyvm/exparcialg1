@@ -1,5 +1,6 @@
 package exparcialg1.demo.Repository;
 
+import exparcialg1.demo.Dtos.UsuarioQueGastoMasDto;
 import exparcialg1.demo.Entity.UsuariosEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,5 +28,14 @@ public interface UsuariosRepository extends JpaRepository<UsuariosEntity,Integer
             nativeQuery = true)
     List<UsuariosEntity> saveGestor(int id, String nombre, String apellido, int dni, String correo, String pass, Boolean activ, int rol);
 
+    @Query(value="SELECT * FROM (SELECT u.nombre, u.apellido, u.dni, u.correo ,sum(p.preciototal) as totalgastado\n" +
+            "FROM pedidos p\n" +
+            "INNER JOIN usuarios u ON u.idusuarios = p.idusuarios\n" +
+            "group by p.idusuarios) subQuery\n" +
+            "WHERE totalgastado = (SELECT max(totalgastado) FROM (SELECT u.nombre, u.apellido, u.dni, u.correo ,sum(p.preciototal) as totalgastado\n" +
+            "FROM pedidos p\n" +
+            "INNER JOIN usuarios u ON u.idusuarios = p.idusuarios\n" +
+            "group by p.idusuarios) subQuery)",nativeQuery = true)
+    List<UsuarioQueGastoMasDto> obtenerUsuarioQueGastoMas();
 
 }
