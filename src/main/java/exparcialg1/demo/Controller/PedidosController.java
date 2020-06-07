@@ -58,7 +58,7 @@ public class PedidosController {
     @PostMapping(value="buscarPedidoPorCod")
     public String buscarPedidoPorCod(HttpSession session,@RequestParam("buscador") String buscador, Model model){
         UsuariosEntity usuario = (UsuariosEntity) session.getAttribute("usuario");
-        List<PedidosEntity> listaMisPedidos = pedidosRepository.buscarPedidoPorCodigoPedido(buscador,usuario.getIdusuarios());
+        List<PedidosEntity> listaMisPedidos = pedidosRepository.buscarPedidoPorCodigoPedido("%"+buscador+"%",usuario.getIdusuarios());
 
         ArrayList<PedidohasproductoEntity> listacompleta2 = new ArrayList<>();
         for (PedidosEntity pedido : listaMisPedidos) {

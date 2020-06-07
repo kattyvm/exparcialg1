@@ -23,7 +23,7 @@ public interface PedidosRepository extends JpaRepository <PedidosEntity, String>
 
     @Query(value="SELECT * \n" +
             "FROM pedidos\n" +
-            "WHERE codpedido=?1 and idusuarios=?2", nativeQuery =true)
+            "WHERE codpedido LIKE ?1 and idusuarios=?2", nativeQuery =true)
     List<PedidosEntity> buscarPedidoPorCodigoPedido(String codpedido, int idusuario);
 
 }
