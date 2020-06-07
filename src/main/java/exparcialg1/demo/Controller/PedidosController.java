@@ -42,6 +42,19 @@ public class PedidosController {
             }
 
         }
+        System.out.println(listacompleta.size());
+        System.out.println(listacompleta.size());
+        System.out.println(listacompleta.size());
+        System.out.println(listacompleta.size());
+        System.out.println(listacompleta.size());
+        System.out.println(listacompleta.size());
+        System.out.println(listacompleta.size());
+        System.out.println(listacompleta.size());
+        System.out.println(listacompleta.size());
+        System.out.println(listacompleta.size());
+        System.out.println(listacompleta.size());
+        System.out.println(listacompleta.size());
+        System.out.println(listacompleta.size());
         model.addAttribute("listaProductosPorPedidos",listacompleta);
         model.addAttribute("listaMisPedidos",listaMisPedidos);
         return "donpepe/misPedidos";

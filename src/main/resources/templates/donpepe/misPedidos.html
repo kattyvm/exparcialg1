@@ -16,6 +16,11 @@
                         <h2 class="mt-5">Mis Pedidos</h2>
                         <div class="whole-wrap">
                             <div class="container mx-auto">
+                                
+                                <div th:if="${msgsuccess != null}" th:text="${msgsuccess}"
+                                     class="alert alert-success py-1"
+                                     role="alert"></div>
+                                
                             </div>
                         </div>
                         <div class="table-responsive mt-4">
@@ -37,8 +42,8 @@
                                             <td>
                                                 <div class="media">
                                                     <div class="media-body">
-                                                        <div th:each="ppp : ${listaProductosPorPedidos}" th:if="${ppp.id.codpedido==p.codpedido}" >
-                                                            <p  th:text="|${ppp.id.codproducto.nombre} (${ppp.cantidad}) |"></p>
+                                                        <div th:each="ppp : ${listaProductosPorPedidos}" th:if="${ppp.id.codpedido.codpedido==p.codpedido}" >
+                                                            <h5  th:text="|${ppp.id.codproducto.nombre} (${ppp.cantidad}) |"></h5>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -47,7 +52,7 @@
                                                 <h5 th:text="${p.preciototal}"></h5>
                                             </td>
                                             <td>
-                                                <h5 th:text="${p.fecha}"></h5>
+                                                <h5 th:text="|${p.fecha.getDayOfMonth()}/${p.fecha.getMonthValue()}/${p.fecha.getYear()}|"></h5>
                                             </td>
                                         </tr>
 
