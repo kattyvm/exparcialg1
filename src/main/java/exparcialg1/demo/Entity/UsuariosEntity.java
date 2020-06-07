@@ -12,11 +12,11 @@ public class UsuariosEntity implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private int idusuarios;
-    @Size(min=1,max = 2, message = "Ingrese máximo 40 caracteres.")
+    @Size(min=2,max = 40, message = "Ingrese máximo 40 caracteres.")
     @NotBlank(message = "Ingrese un nombre.")
     @Column(nullable = false)
     private String nombre;
-    @Size(min=1,max = 2, message = "Ingrese máximo 40 caracteres.")
+    @Size(min=2,max = 40, message = "Ingrese máximo 40 caracteres.")
     @NotBlank(message = "Ingrese un apellido.")
     @Column(nullable = false)
     private String apellido;
@@ -29,8 +29,8 @@ public class UsuariosEntity implements Serializable{
     @NotBlank(message = "Ingrese una direccion de correo electronico.")
     @Column(nullable = false)
     private String correo;
-    @NotBlank(message = "Ingrese una contraseña.")
-    @Column(nullable = false)
+    //@NotBlank(message = "Ingrese una contraseña.")
+    //@Column(nullable = false)
     private String pwd;
     @Column(nullable = false)
     private Boolean enabled;

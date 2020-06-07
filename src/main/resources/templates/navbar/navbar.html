@@ -79,7 +79,7 @@
                                                 <li><a th:href="@{/blog-details.html}">Blog Details</a></li>
                                             </ul>
                                         </li>
-                                        <li sec:authorize="hasAuthority('Administrador')"><a th:href="@{/admin}">Gestores</a>
+                                        <li sec:authorize="hasAuthority('Administrador')"><a th:href="@{/admin/listGestor/}">Gestores</a>
                                             <ul class="submenu">
                                                 <li><a th:href="@{/login.html}">Login</a></li>
                                                 <li><a th:href="@{/cart.html}">Cart</a></li>

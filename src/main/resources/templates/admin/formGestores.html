@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="navbar/navbar.html ::cabecera(title='Formulario de Gestores')">
+    </head>
+    <body>
+
+        <div th:replace="navbar/navbar.html :: topbar(num=${num})"></div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+            <div class="d-sm-flex align-items-center justify-content-between mb-0 mt-5">
+                <h1 th:text="${gestor.idusuarios==0}? 'Nuevo Gestor':'Editar Gestor'" class="h3 mb-4 text-gray-900"></h1>
+            </div>
+
+            <form method="post" th:action="@{/admin/saveGestor}" th:object="${gestor}" enctype="multipart/form-data">
+                <input hidden type="text" class="form-control" th:field="*{idusuarios}">
+
+                <div class="col-md-6 form-group p_star">
+                    <label  class="col-form-label">Nombre:</label>
+                    <input type="text" class="form-control" th:field="*{nombre}" >
+                    <div class="text-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">Error</div>
+                </div>
+                <div class="col-md-6 form-group p_star">
+                    <label  class="col-form-label">Apellido:</label>
+                    <input type="text" class="form-control" th:field="*{apellido}" >
+                    <div class="text-danger" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}">Error</div>
+                </div>
+
+                <div class="col-md-6 form-group p_star">
+                    <label class="col-form-label">DNI:</label>
+                    <input  type="text" class="form-control" th:field="*{dni}" >
+                    <div class="text-danger" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}">Error</div>
+                </div>
+
+                <div class="col-md-6 form-group p_star">
+                    <label  class="col-form-label">Correo:</label>
+                    <input type="text" class="form-control" th:field="*{correo}">
+                    <div class="text-danger" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">Error</div>
+                </div>
+
+                <div class="modal-footer">
+                    <a type="button" th:href="@{/admin/listGestor}"  class="btn genric-btn danger circle" >Cancelar</a>
+                    <button type="submit" class="btn genric-btn danger circle"><a style="color:white;text-decoration:none">Guardar cambios</a></button>
+                </div>
+            </form>
+
+                </div>
+            </div>
+        </div>
+        
+    </body>
+</html>

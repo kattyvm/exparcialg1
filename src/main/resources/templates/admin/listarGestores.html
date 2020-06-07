@@ -5,22 +5,24 @@
     <body>
 
         <!--div th:replace="navbar/navbar.html :: preloader"></div-->
-        <div th:replace="navbar/navbar.html :: topbar"></div>
+        <div th:replace="navbar/navbar.html :: topbar(num=${num})"></div>
 
         <div class="container">
 
-            <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-900">Administración de Gestores</h1>
-                <button type="button"
-                        class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                        class="fas fa-user-plus fa-sm text-white-50"></i> Registrar Gestor
-                </button>
+            <div class="d-sm-flex align-items-center justify-content-between mb-0 mt-5">
+                <h1 class="h3 mb-4 text-gray-900">Administración de Gestores</h1>
+                <a th:href="@{'/admin/formGestor'}" type="button"
+                        class="btn genric-btn danger circle"><i
+                        class="new-Gestor fas fa-user-plus fa-sm text-white-50"></i> Registrar Gestor
+                </a>
             </div>
 
-            <p class="mb-4">Aquí puedes administrar los gestores de la Tienda Don Pepe.
-            </p>
+            <p class="mb-4">Aquí puedes administrar los gestores de la Tienda Don Pepe.</p>
 
-        <div class="card shadow mb-4">
+            <div id="msg" th:if="${msg != null}" th:text="${msg}" class="alert alert-success py-1" role="alert"></div>
+
+
+        <div class="card shadow mb-2 mt-2">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold ">Lista de Gestores</h6>
             </div>
@@ -56,8 +58,12 @@
                                 <td th:text="${gestor.dni}"></td>
                                 <td th:text="${gestor.correo}">-</td>
                                 <td>
-                                    <button class="btn btn-datatable btn-icon btn-primary mr-2"><i class="fa fa-edit"></i></button>
-                                    <button class="btn btn-datatable btn-icon btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                    <a class="btn genric-btn danger circle mr-2" th:href="@{'/admin/editGestor?id=' + ${gestor.idusuarios}}">
+                                        <i class="fa fa-edit"></i>
+                                        </a>
+                                    <a class="btn genric-btn danger circle" th:href="@{'/admin/deleteGestor?id=' + ${gestor.idusuarios}}">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
                                 </td>
                             </tr>
 
@@ -72,5 +78,7 @@
         <div th:replace="navbar/navbar.html :: footer"></div>
 
         <div th:replace="navbar/navbar.html:: jscript"></div>
+
+
     </body>
 </html>
