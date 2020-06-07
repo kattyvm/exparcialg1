@@ -10,10 +10,11 @@
 
 
         <div class="container mt-5 align-content-center">
-            <h3 th:text="${producto.codproducto== null? 'Nuevo Producto' : 'Editar Producto'}"></h3>
-            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-danger" role="alert"></div>
             <form th:action="@{'/gestor/guardar'}" method="post" novalidate="novalidate"
                   th:object="${producto}">
+            <h3 th:text="${producto.codproducto==null || producto.codproducto==''  ? 'Nuevo Producto' : 'Editar Producto'}"></h3>
+            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-danger" role="alert"></div>
+
                 <input type="hidden" th:field="*{codproducto}"/>
                 <div class="row">
                     <div class="col-lg-6">
@@ -22,7 +23,7 @@
                             <input type="text" class="form-control" th:field="*{nombre}"/>
                             <div class="text-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
                         </div>
-                        <div class="form-group" th:hidden="${producto.codproducto != null}">
+                        <div class="form-group" th:hidden="${producto.codproducto!=null&&producto.codproducto!=''}">
                             <label>Precio unitario:</label>
                             <input type="text" class="form-control" th:field="*{preciounitario}"/>
                             <div class="text-danger" th:if="${#fields.hasErrors('preciounitario')}"
@@ -41,7 +42,7 @@
                             <div class="text-danger" th:if="${#fields.hasErrors('descripcion')}"
                                  th:errors="*{descripcion}"></div>
                         </div>
-                        <div class="form-group" th:hidden="${producto.codproducto != null}">
+                        <div class="form-group" th:hidden="${producto.codproducto!=null&&producto.codproducto!=''}">
                             <label>Foto:</label>
                             <input type="file" th:field="*{foto}">
                         </div>
