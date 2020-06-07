@@ -1,6 +1,8 @@
 package exparcialg1.demo.Controller;
 
+import exparcialg1.demo.Entity.PedidosEntity;
 import exparcialg1.demo.Entity.ProductosEntity;
+import exparcialg1.demo.Repository.PedidosRepository;
 import exparcialg1.demo.Repository.ProductosRepository;
 import exparcialg1.demo.Repository.UsuariosRepository;
 import exparcialg1.demo.constantes.ProductoCarrito;
@@ -13,6 +15,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,6 +30,8 @@ public class UsuariosController {
     UsuariosRepository usuariosRepository;
     @Autowired
     ProductosRepository productosRepository;
+    @Autowired
+    PedidosRepository pedidosRepository;
 
     @GetMapping(value = {"/"})
     public String index(Model m) {
@@ -82,38 +88,43 @@ public class UsuariosController {
     @GetMapping(value = {"/myCart"})
     public String viewCart(HttpSession session, Model m) {
         ArrayList<ProductoCarrito> cart = (ArrayList<ProductoCarrito>) session.getAttribute("cart");
-        boolean validCart= validateCart(cart , session, m);
-        m.addAttribute("path", "A0006I.jpg");
+        if (cart.size()==0) {
+            boolean validCart = validateCart(cart, session, m);
+            m.addAttribute("path", "A0006I.jpg");
 
 
-        BigDecimal total = new BigDecimal(0);
+            BigDecimal total = new BigDecimal(0);
 
-        for (ProductoCarrito prodCart : cart) {
-            BigDecimal cant = new BigDecimal(prodCart.getCantidad());
-            total = total.add(prodCart.getProductos().getPreciounitario().multiply(cant));
+            for (ProductoCarrito prodCart : cart) {
+                BigDecimal cant = new BigDecimal(prodCart.getCantidad());
+                total = total.add(prodCart.getProductos().getPreciounitario().multiply(cant));
+            }
+            m.addAttribute("total", total);
         }
-        m.addAttribute("total", total);
+
+
+
         return "donpepe/myCart";
     }
 
 
-    private boolean validateCart(ArrayList<ProductoCarrito> cart ,HttpSession session,Model m){
+    private boolean validateCart(ArrayList<ProductoCarrito> cart, HttpSession session, Model m) {
         int i = 0;
-        boolean valid=true;
+        boolean valid = true;
         for (ProductoCarrito prodCart : cart) {
             Optional<ProductosEntity> opt = productosRepository.findById(prodCart.getProductos().getCodproducto());
             if (!opt.isPresent()) {
                 prodCart.setAvailable(false);
                 cart.set(i, prodCart);
                 m.addAttribute("msgerror", "Ups! Parece que algunos de tus productos ya no estan disponibles");
-                valid=false;
+                valid = false;
             } else {
                 ProductosEntity prodTienda = opt.get();
                 if (prodTienda.getStock() < prodCart.getCantidad()) {
                     prodCart.setAvailable(false);
                     cart.set(i, prodCart);
                     m.addAttribute("msgerror", "Ups! Parece que algunos de tus productos no tienen suficiente stock");
-                    valid=false;
+                    valid = false;
                 }
             }
             i++;
@@ -123,7 +134,7 @@ public class UsuariosController {
     }
 
     @GetMapping(value = {"/reviewCart"})
-    public String reviewCart(HttpSession session,RedirectAttributes att) {
+    public String reviewCart(HttpSession session, RedirectAttributes att) {
         ArrayList<ProductoCarrito> cart = (ArrayList<ProductoCarrito>) session.getAttribute("cart");
         Iterator itr = cart.iterator();
         while (itr.hasNext()) {
@@ -135,7 +146,7 @@ public class UsuariosController {
         session.setAttribute("cart", cart);
         int numcart = updateCantidad(cart);
         session.setAttribute("numcart", numcart);
-        att.addFlashAttribute("msgsuccess","Productos borrados exitosamente");
+        att.addFlashAttribute("msgsuccess", "Productos borrados exitosamente");
         return "redirect:/usuario/myCart";
     }
 
@@ -144,6 +155,7 @@ public class UsuariosController {
 
         return "donpepe/credit";
     }
+
     @GetMapping(value = {"/borrar"})
     public String borrar(@RequestParam("id") String id, RedirectAttributes att, HttpSession session) {
         ArrayList<ProductoCarrito> cart = (ArrayList<ProductoCarrito>) session.getAttribute("cart");
@@ -151,18 +163,21 @@ public class UsuariosController {
         while (itr.hasNext()) {
             ProductoCarrito prodCart = (ProductoCarrito) itr.next();
             if (prodCart.getProductos().getCodproducto().equals(id)) {
-                itr.remove();
+                prodCart.setCantidad(prodCart.getCantidad() - 1);
+                if (prodCart.getCantidad() == 0) {
+                    itr.remove();
+                }
             }
         }
         session.setAttribute("cart", cart);
-        att.addFlashAttribute("msgsuccess","Producto borrado exitosamente");
+        att.addFlashAttribute("msgsuccess", "Producto borrado exitosamente");
         return "redirect:/usuario/myCart";
     }
 
 
     @PostMapping(value = {"/pay"})
-    public String pay(@ModelAttribute("ccnumber") String ccstr, RedirectAttributes att, HttpSession session, Model m) {
-
+    public String pay(@RequestParam("ccstr") String ccstr, RedirectAttributes att, HttpSession session, Model m) {
+        att.addFlashAttribute("ccstr", ccstr);
 
 
         try {
@@ -179,26 +194,57 @@ public class UsuariosController {
 
             }
             ArrayList<ProductoCarrito> cart = (ArrayList<ProductoCarrito>) session.getAttribute("cart");
-            boolean validCart= validateCart(cart , session, m);
-            if (!validCart){
+            boolean validCart = validateCart(cart, session, m);
+            if (!validCart) {
                 return "redirect:/usuario/myCart";
             }
 
+            PedidosEntity pedidosEntity = null;
+
+            LocalDateTime today = LocalDateTime.now();
+            String year = String.valueOf(today.getYear());
+            String month = String.valueOf(today.getMonth());
+            String day = String.valueOf(today.getDayOfMonth());
 
 
+            List<PedidosEntity> pedidosList = pedidosRepository.findAll();
+            int mayor=0;
 
 
+            for (PedidosEntity ped : pedidosList){
+                StringBuilder strNum = new StringBuilder();
+                char[] codarray = ped.getCodpedido().toCharArray();
+                for(int i=10;i<codarray.length;i++) {
+                    strNum.append(codarray[i]);
+                }
+                int codnum = Integer.parseInt(strNum.toString());
+                if (codnum>mayor){
+                    mayor=codnum;
+                }
+            }
 
+            int codpednum=mayor+1;
+            String codpedstr=String.valueOf(codpednum);
+            String codped= "PE"+day+month+year+codpedstr;
+            System.out.println(codped);
+            System.out.println(codped);
+            System.out.println(codped);
+            System.out.println(codped);
+            System.out.println(codped);
+            System.out.println(codped);
+            System.out.println(codped);
+            System.out.println(codped);
+            System.out.println(codped);
+            System.out.println(codped);
+            System.out.println(codped);
+            System.out.println(codped);
+            System.out.println(codped);
         } catch (Exception e) {
             att.addFlashAttribute("msgerror", "Ups! Parece que la tarjeta no es válida");
             return "redirect:/usuario/checkout";
         }
         return "redirect:/";
     }
-
-
-
-
 
 
     private boolean validateCC(String ccstr) {

@@ -31,10 +31,9 @@
                         <div class="whole-wrap">
                             <form class="row contact_form" th:action="@{/usuario/pay}" method="post">
                                 <div class="col-md-6 form-group p_star">
-                                    <input type="text" required max="9999999999999999"
+                                    <input type="number" required max="9999999999999999"
                                            oninvalid="this.setCustomValidity('Número de tarjeta no válido')"
-                                           oninput="this.setCustomValidity('')" class="form-control" id="name"
-                                           name="ccnumber"/>
+                                           oninput="this.setCustomValidity('')" class="form-control" name="ccstr" th:value="${ccstr!= null? ccstr:''}"/>
                                 </div>
                                 
                                 <div class="col-md-12 form-group">
