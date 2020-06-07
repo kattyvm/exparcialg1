@@ -27,6 +27,7 @@ public class ProductosEntity implements Serializable {
     @NotNull(message = "Ingrese un precio.")
     @Column(nullable = false)
     private BigDecimal preciounitario;
+    @Column(nullable = false)
     private String foto;
     @Digits(integer = 11, fraction = 0, message = "Ingrese un numero entero de stock.")
     @Positive(message = "Ingrese un stock válido.")

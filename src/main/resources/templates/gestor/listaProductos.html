@@ -32,7 +32,7 @@
                         <td th:text="${p.stock}"></td>
                         <td th:text="${p.descripcion}"></td>
                         <td><img
-                                th:src="${p.foto}"
+                                th:src="@{'/images/'+${p.foto}}"
                                 alt="" height=100 width=100></td>
                         <td><a type="button" th:href="@{'/gestor/editar?id='+${p.codproducto}}"
                                class="btn genric-btn info circle"><i
