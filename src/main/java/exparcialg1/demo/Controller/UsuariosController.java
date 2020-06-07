@@ -245,7 +245,7 @@ public class UsuariosController {
 
                 BigDecimal multiply = prodCart.getProductos().getPreciounitario().multiply(new BigDecimal(prodCart.getCantidad()));
                 pedhasprod.setSubtotal(multiply);
-                PedhasProdID id=new PedhasProdID(pedidoscreado.getCodpedido(),prodCart.getProductos().getCodproducto());
+                PedhasProdID id=new PedhasProdID(pedidoscreado,prodCart.getProductos());
                 pedhasprod.setId(id);
                 pedidoHasProductoRepository.save(pedhasprod);
             }
