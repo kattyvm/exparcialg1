@@ -1,0 +1,23 @@
+DELIMITER $$
+CREATE PROCEDURE saveGestor(IN idusu INT, IN firstname VARCHAR(40), IN lastname VARCHAR(40), IN doc INT, IN email VARCHAR(50),
+			  IN pass VARCHAR(100), IN activ INT, IN rol INT)
+BEGIN	
+	IF idusu = 0 THEN
+    INSERT INTO usuarios (nombre, apellido,
+                          dni, correo,
+                          pwd, enabled, idroles)
+	          VALUES (firstname, lastname,
+			 doc, email,
+                         pass, activ, rol); 
+	ELSE 
+    UPDATE usuarios SET nombre = firstname,
+			apellido = lastname,
+			dni = doc,
+                        correo = email,
+                        pwd = pass,
+                        enabled = activ,
+                        idroles = rol
+		  WHERE idusuarios = idusu;
+	END IF;
+END $$
+DELIMITER ;

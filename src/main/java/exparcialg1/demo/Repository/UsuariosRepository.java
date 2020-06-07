@@ -22,7 +22,7 @@ public interface UsuariosRepository extends JpaRepository<UsuariosEntity,Integer
             nativeQuery = true)
     public Optional<UsuariosEntity> obtenerUsuarioCorreo(int id);
 
-    //List<UsuariosEntity> findUsuariosEntityByDni(int dni);
+    //List<UsuariosEntity> findUsuariosEntityByCorreo(String correo);
 
     @Query(value="CALL saveGestor(?, ?, ?, ?, ?, ?, ?, ?)",
             nativeQuery = true)

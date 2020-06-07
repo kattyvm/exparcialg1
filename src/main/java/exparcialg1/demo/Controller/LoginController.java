@@ -7,6 +7,7 @@ import exparcialg1.demo.constantes.ProductoCarrito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -160,17 +161,17 @@ public class LoginController {
             }
             if (part1.trim().length() == 6) {
                 if (part2.trim().length() == 1) {
-                    if(!Pattern.compile("[0-9]").matcher(part2).find()) {
+                    if (!Pattern.compile("[0-9]").matcher(part2).find()) {
                         bindingResult.rejectValue("pwd", "error.user", "Debe contener al menos 2 números");
                     }
                 }
                 if (part2.trim().length() == 2) {
-                    if(!Pattern.compile("[10-99]").matcher(part2).find()) {
+                    if (!Pattern.compile("[10-99]").matcher(part2).find()) {
                         bindingResult.rejectValue("pwd", "error.user", "Debe contener al menos 2 números");
                     }
                 }
                 if (part2.trim().length() == 3) {
-                    if(!Pattern.compile("[10-999]").matcher(part2).find()) {
+                    if (!Pattern.compile("[10-999]").matcher(part2).find()) {
                         bindingResult.rejectValue("pwd", "error.user", "Debe contener al menos 2 números");
                     }
                 }
@@ -205,5 +206,41 @@ public class LoginController {
 
         return "redirect:/loginForm";
     }
+
+    @GetMapping("/forgotPassword")
+    public String olvideContraseña(@ModelAttribute("usuario") UsuariosEntity usuarios) {
+        return "/login/forgetForm";
+    }
+
+    @PostMapping("/recuperarContraseña")
+    public String recuperarContraseña(@ModelAttribute("usuario") @Valid UsuariosEntity usuarios,
+                                      BindingResult bindingResult,
+                                      RedirectAttributes attr,
+                                      @RequestParam("recuperarcorreo") String mail,
+                                      Model model) {
+
+        List<UsuariosEntity> listUsuarios = usuariosRepository.findAll();
+        for (UsuariosEntity usu : listUsuarios) {
+            if (usu.getCorreo() != usuarios.getCorreo()) {
+                bindingResult.rejectValue("correo", "error.user", "Este correo no se está registrado.");
+            }
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "/login/forgetForm";
+        } else if (usuarios.getCorreo().equals(mail)) {
+            UsuariosEntity email = usuariosRepository.findUsuariosEntityByCorreo(mail);
+            String pass = GeneratePwd.getAlphaString(8) + GeneratePwd.getAlphaNumeric(2);
+            attr.addAttribute("msg", "Tu nueva contraseña es " + pass);
+            String passEncrypt = new BCryptPasswordEncoder().encode(pass);
+
+            email.setPwd(passEncrypt);
+            usuariosRepository.save(email);
+        }
+        //UsuariosEntity email = usuariosRepository.findUsuariosEntityByCorreo(mail);
+
+        return "redirect:/loginForm";
+    }
+
 
 }

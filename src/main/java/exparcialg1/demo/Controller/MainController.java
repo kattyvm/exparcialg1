@@ -4,21 +4,24 @@ import exparcialg1.demo.Entity.PedidosEntity;
 import exparcialg1.demo.Entity.ProductosEntity;
 import exparcialg1.demo.Repository.ProductosRepository;
 import exparcialg1.demo.constantes.ProductoCarrito;
+import exparcialg1.demo.utils.CustomMailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +29,10 @@ import java.util.Optional;
 @Controller
 @RequestMapping(value = {"/"})
 public class MainController {
+
+    @Autowired
+    CustomMailService customMailService;
+
     @Autowired
     ProductosRepository productosRepository;
 
@@ -103,5 +110,19 @@ public class MainController {
         map.addAttribute("path", "A0006I.jpg");
         return "donpepe/pgPrincipal";
 
+    }
+
+
+    @ResponseBody
+    @GetMapping(value = "/testEmail",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> testEmail(){
+
+        try {
+            customMailService.sendTestEmailWithAtachment();
+            return new ResponseEntity<>("nice", HttpStatus.OK);
+        }
+        catch (IOException | MessagingException ex){
+            return new ResponseEntity<>(ex.toString(), HttpStatus.ACCEPTED);
+        }
     }
 }
