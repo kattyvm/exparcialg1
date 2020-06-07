@@ -16,6 +16,9 @@ public interface PedidoHasProductoRepository extends JpaRepository<Pedidohasprod
             "WHERE codproducto =?1",nativeQuery = true)
     List<PedidohasproductoEntity> buscarPedidosPorProducto(String codproducto);
 
-
+    @Query(value="SELECT * \n" +
+            "FROM pedidohasproductos\n" +
+            "WHERE codpedido=?1",nativeQuery=true)
+    List<PedidohasproductoEntity> buscarProductos(String codproducto);
 
 }

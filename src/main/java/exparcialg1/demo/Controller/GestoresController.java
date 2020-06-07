@@ -7,7 +7,6 @@ import exparcialg1.demo.Repository.PedidosRepository;
 import exparcialg1.demo.Repository.ProductosRepository;
 import exparcialg1.demo.Repository.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

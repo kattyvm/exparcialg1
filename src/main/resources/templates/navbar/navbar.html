@@ -103,7 +103,7 @@
                                     <ul id="navigation">
                                         <li><a th:href="@{/}">Productos</a></li>
                                         
-                                        <li sec:authorize="isAuthenticated()"><a th:href="@{/about.html}">Tus
+                                        <li sec:authorize="isAuthenticated()"><a th:href="@{/pedidos/}">Tus
                                             Pedidos</a></li>
                                         <li sec:authorize="hasAuthority('Gestor')"><a
                                                 th:href="@{/gestor/listaProdGestion/}">Gestión de Productos</a>

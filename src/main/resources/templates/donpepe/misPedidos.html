@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="navbar/navbar.html :: cabecera(title='Mis Pedidos')">
+    </head>
+
+    <body>
+        <header th:replace="navbar/navbar.html:: topbar(num=${num})">
+        </header>
+        <main>
+            <!--? Preloader Start -->
+            <div th:replace="navbar/navbar.html:: preloader"></div>
+            <!--================Cart Area =================-->
+            <section class="cart_area">
+                <div class="container">
+                    <div class="cart_inner">
+                        <h2 class="mt-5">Mis Pedidos</h2>
+                        <div class="whole-wrap">
+                            <div class="container mx-auto">
+                            </div>
+                        </div>
+                        <div class="table-responsive mt-4">
+                            <div  class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Codigo de pedido</th>
+                                            <th scope="col">Productos</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">Fecha de compra</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="p : ${listaMisPedidos}" >
+                                            <td>
+                                                <h5 th:text="${p.codpedido}" ></h5>
+                                            </td>
+                                            <td>
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div th:each="ppp : ${listaProductosPorPedidos}" th:if="${ppp.id.codpedido==p.codpedido}" >
+                                                            <p  th:text="|${ppp.id.codproducto.nombre} (${ppp.cantidad}) |"></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <h5 th:text="${p.preciototal}"></h5>
+                                            </td>
+                                            <td>
+                                                <h5 th:text="${p.fecha}"></h5>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                                <div class="checkout_btn_inner float-right">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!--================End Cart Area =================-->
+        </main>
+        >
+
+        <!--? Search model Begin -->
+        <div class="search-model-box">
+            <div class="h-100 d-flex align-items-center justify-content-center">
+                <div class="search-close-btn">+</div>
+                <form class="search-model-form">
+                    <input type="text" id="search-input" placeholder="Searching key.....">
+                </form>
+            </div>
+        </div>
+        <!-- Search model end -->
+
+        <!-- JS here -->
+        <div th:replace="navbar/navbar.html :: footer"></div>
+        <div th:replace="navbar/navbar.html:: jscript"></div>
+
+    </body>
+</html>
