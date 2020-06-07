@@ -4,7 +4,11 @@ import exparcialg1.demo.Entity.RolesEntity;
 import exparcialg1.demo.Entity.UsuariosEntity;
 import exparcialg1.demo.Repository.UsuariosRepository;
 import exparcialg1.demo.constantes.ProductoCarrito;
+import exparcialg1.demo.utils.CustomMailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.parameters.P;
@@ -12,14 +16,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +33,10 @@ public class LoginController {
 
     @Autowired
     UsuariosRepository usuariosRepository;
+
+    @Autowired
+    CustomMailService customMailService;
+
 
     @GetMapping("/loginForm")
     public String loginForm() {
@@ -200,7 +207,7 @@ public class LoginController {
 
             usuariosRepository.save(usuarios);
         }
-        //no funciona pero el query sí
+        //Sí funciona y guarda/actualiza pero no redirige a la página
         //usuariosRepository.saveGestor(usuarios.getIdusuarios(),usuarios.getNombre(),usuarios.getApellido(),
         //        usuarios.getDni(),usuarios.getCorreo(),usuarios.getPwd(), usuarios.getEnabled(),usuarios.getRol().getIdroles());
 
@@ -213,33 +220,44 @@ public class LoginController {
     }
 
     @PostMapping("/recuperarContraseña")
-    public String recuperarContraseña(@ModelAttribute("usuario") @Valid UsuariosEntity usuarios,
-                                      BindingResult bindingResult,
+    public String recuperarContraseña(@ModelAttribute("usuario") UsuariosEntity usuarios,
                                       RedirectAttributes attr,
-                                      @RequestParam("recuperarcorreo") String mail,
-                                      Model model) {
+                                      Model model
+                                      ) {
 
-        List<UsuariosEntity> listUsuarios = usuariosRepository.findAll();
-        for (UsuariosEntity usu : listUsuarios) {
-            if (usu.getCorreo() != usuarios.getCorreo()) {
-                bindingResult.rejectValue("correo", "error.user", "Este correo no se está registrado.");
-            }
-        }
-
-        if (bindingResult.hasErrors()) {
-            return "/login/forgetForm";
-        } else if (usuarios.getCorreo().equals(mail)) {
-            UsuariosEntity email = usuariosRepository.findUsuariosEntityByCorreo(mail);
+            Optional<UsuariosEntity> opt = usuariosRepository.findUsuariosByCorreo(usuarios.getCorreo());
             String pass = GeneratePwd.getAlphaString(8) + GeneratePwd.getAlphaNumeric(2);
-            attr.addAttribute("msg", "Tu nueva contraseña es " + pass);
+            attr.addFlashAttribute("msg", "Tu nueva contraseña es " + pass);
             String passEncrypt = new BCryptPasswordEncoder().encode(pass);
 
-            email.setPwd(passEncrypt);
-            usuariosRepository.save(email);
-        }
-        //UsuariosEntity email = usuariosRepository.findUsuariosEntityByCorreo(mail);
+            usuarios.setPwd(passEncrypt);
+
+            usuarios.setCorreo(opt.get().getCorreo());
+            usuarios.setIdusuarios(opt.get().getIdusuarios());
+            usuarios.setNombre(opt.get().getNombre());
+            usuarios.setApellido(opt.get().getApellido());
+            usuarios.setDni(opt.get().getDni());
+            usuarios.setEnabled(opt.get().getEnabled());
+            usuarios.setRol(opt.get().getRol());
+
+            //customMailService.sendEmail(pass);
+
+            usuariosRepository.save(usuarios);
 
         return "redirect:/loginForm";
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/testEmail",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> testEmail(){
+
+        try {
+            customMailService.sendEmail();
+            return new ResponseEntity<>("nice", HttpStatus.OK);
+        }
+        catch (IOException | MessagingException ex){
+            return new ResponseEntity<>(ex.toString(), HttpStatus.ACCEPTED);
+        }
     }
 
 

@@ -18,14 +18,14 @@ public class CustomMailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    public void sendEmail() {
+    public void sendEmail() throws javax.mail.MessagingException, IOException{
 
         SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setTo("to_1@gmail.com", "to_2@gmail.com", "to_3@yahoo.com");
+        msg.setTo("a20160555@pucp.edu.pe");
 
         msg.setSubject("Recuperar contraseña");
         msg.setText("Usted solicitó la recuperación de la contraseña en la Tiendita de Don Pepe." +
-                "\n ");
+                "\n La nueva contraseña es: " );
 
         javaMailSender.send(msg);
 

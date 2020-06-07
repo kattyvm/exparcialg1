@@ -141,10 +141,10 @@ public class AdminController {
             usuarios.setEnabled(opt.get().getEnabled());
             usuarios.setRol(opt.get().getRol());
         }
-        //usuariosRepository.save(usuarios);
-        //no funciona pero el query sí
-        usuariosRepository.saveGestor(usuarios.getIdusuarios(),usuarios.getNombre(),usuarios.getApellido(),
-                usuarios.getDni(),usuarios.getCorreo(),usuarios.getPwd(), usuarios.getEnabled(),usuarios.getRol().getIdroles());
+        usuariosRepository.save(usuarios);
+        //Sí funciona y guarda/actualiza pero no redirige a la página
+        //usuariosRepository.saveGestor(usuarios.getIdusuarios(),usuarios.getNombre(),usuarios.getApellido(),
+        //        usuarios.getDni(),usuarios.getCorreo(),usuarios.getPwd(), usuarios.getEnabled(),usuarios.getRol().getIdroles());
 
         return "redirect:/admin/listGestor";
     }

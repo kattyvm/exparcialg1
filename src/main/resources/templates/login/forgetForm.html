@@ -15,16 +15,16 @@
 
                     <p class="mb-4">Ingresa tu correo abajo y te enviaremos tu nueva contraseña</p>
 
-                    <form method="post" th:action="@{/admin/saveGestor}" th:object="${usuario}"
+                    <form method="post" th:action="@{/recuperarContraseña}" th:object="${usuario}"
                           enctype="multipart/form-data">
 
                         <div class="row col-md-12 ">
                             <div class="col-md-6 form-group p_star">
                                 <label class="col-form-label">Correo:</label>
                                 <input type="text" class="form-control" th:field="*{correo}">
-                                <div class="text-danger" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">
+                                <!--div class="text-danger" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">
                                     Error
-                                </div>
+                                </div-->
                             </div>
                         </div>
 
@@ -38,6 +38,10 @@
                 </div>
             </div>
         </div>
+
+        <div th:replace="navbar/navbar.html :: footer"></div>
+
+        <div th:replace="navbar/navbar.html:: jscript"></div>
 
     </body>
 </html>

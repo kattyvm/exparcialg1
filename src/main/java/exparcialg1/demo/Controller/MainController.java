@@ -113,16 +113,5 @@ public class MainController {
     }
 
 
-    @ResponseBody
-    @GetMapping(value = "/testEmail",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> testEmail(){
 
-        try {
-            customMailService.sendTestEmailWithAtachment();
-            return new ResponseEntity<>("nice", HttpStatus.OK);
-        }
-        catch (IOException | MessagingException ex){
-            return new ResponseEntity<>(ex.toString(), HttpStatus.ACCEPTED);
-        }
-    }
 }
