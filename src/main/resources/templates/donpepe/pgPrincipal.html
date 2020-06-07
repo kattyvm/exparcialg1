@@ -31,7 +31,7 @@
                         <form method="post" th:action="@{/buscarProductos}">
                             <input name="buscador" class="form-control mb-3" type="text" placeholder="Buscar por nombre o código"/>
                         </form>
-                        <a th:if="${buscador!=null}" th:href="@{/}" class="btn btn-danger mt-4 mb-4" >Volver a mostrar la lista completa</a>
+                        <a th:if="${buscador!=null}" th:href="@{/}" class="btn genric-btn info circle float-md-right" >Volver a mostrar la lista completa</a>
                     </div>
                 </div>
                 <divth:if="${msgEmpty == null}">
