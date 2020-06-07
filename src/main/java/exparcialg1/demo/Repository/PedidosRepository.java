@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Repository
 public interface PedidosRepository extends JpaRepository <PedidosEntity, String> {
@@ -15,4 +16,9 @@ public interface PedidosRepository extends JpaRepository <PedidosEntity, String>
 
     @Query(value="SELECT count(codpedido) as cantidadcompras FROM pedidos",nativeQuery = true)
     int obtenerCantCompras();
+
+    @Query(value="SELECT * FROM pedidos\n" +
+            "WHERE idusuarios=?1",nativeQuery = true)
+    List<PedidosEntity> buscarPorUsuario(int usuario);
+
 }
