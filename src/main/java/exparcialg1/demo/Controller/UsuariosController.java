@@ -59,9 +59,13 @@ public class UsuariosController {
                     for (ProductoCarrito prodCart : cart) {
                         if (prodCart.getProductos().getCodproducto().equals(prodTienda.getCodproducto())) {
                             prodCart.setCantidad(prodCart.getCantidad() + 1);
+                            if (prodCart.getCantidad() == 5) {
+                                att.addFlashAttribute("msg1", "No se puede añadir más de 4 unidades por producto");
+
+                                return "redirect:/";
+                            }
                             cart.set(i, prodCart);
                             found = true;
-
                         }
 
                         i++;
@@ -78,6 +82,7 @@ public class UsuariosController {
                     session.setAttribute("cart", cart);
                     session.setAttribute("numcart", numcart);
                     att.addFlashAttribute("msg2", "Producto añadido al carrito!");
+
 
                 } else {
                     att.addFlashAttribute("msg1", "Ups! No hay stock del producto seleccionado");
@@ -96,6 +101,18 @@ public class UsuariosController {
         ArrayList<ProductoCarrito> cart = (ArrayList<ProductoCarrito>) session.getAttribute("cart");
         if (cart.size() != 0) {
             boolean validCart = validateCart(cart, session, m);
+            if (!validCart) {
+                BigDecimal total = new BigDecimal(0);
+
+                for (ProductoCarrito prodCart : cart) {
+                    BigDecimal cant = new BigDecimal(prodCart.getCantidad());
+                    total = total.add(prodCart.getProductos().getPreciounitario().multiply(cant));
+                }
+                m.addAttribute("total", total);
+                return "donpepe/myCart";
+            }
+
+
             m.addAttribute("path", "A0006I.jpg");
 
 
@@ -132,10 +149,13 @@ public class UsuariosController {
                     cart.set(i, prodCart);
                     m.addAttribute("msgerror", "Ups! Parece que algunos de tus productos no tienen suficiente stock");
                     valid = false;
+                }else{
+                    prodCart.setAvailable(true);
                 }
             }
             i++;
         }
+        m.addAttribute("path", "A0006I.jpg");
         session.setAttribute("cart", cart);
         return valid;
     }
@@ -162,6 +182,12 @@ public class UsuariosController {
         ArrayList<ProductoCarrito> cart = (ArrayList<ProductoCarrito>) session.getAttribute("cart");
         BigDecimal total = new BigDecimal(0);
 
+        boolean validCart = validateCart(cart, session, m);
+        if (!validCart) {
+            return "redirect:/usuario/myCart";
+        }
+
+
         for (ProductoCarrito prodCart : cart) {
             BigDecimal cant = new BigDecimal(prodCart.getCantidad());
             total = total.add(prodCart.getProductos().getPreciounitario().multiply(cant));
@@ -184,9 +210,9 @@ public class UsuariosController {
                 }
             }
         }
-        int numcart = (int)session.getAttribute("numcart");
+        int numcart = (int) session.getAttribute("numcart");
         numcart--;
-        session.setAttribute("numcart",numcart);
+        session.setAttribute("numcart", numcart);
         session.setAttribute("cart", cart);
         att.addFlashAttribute("msgsuccess", "Producto borrado exitosamente");
         return "redirect:/usuario/myCart";
@@ -238,26 +264,26 @@ public class UsuariosController {
             pedidosRepository.save(pedidosEntity);
 
             Optional<PedidosEntity> opt = pedidosRepository.findById(pedidosEntity.getCodpedido());
-            PedidosEntity pedidoscreado=opt.get();
+            PedidosEntity pedidoscreado = opt.get();
             for (ProductoCarrito prodCart : cart) {
-                PedidohasproductoEntity pedhasprod=new PedidohasproductoEntity();
+                PedidohasproductoEntity pedhasprod = new PedidohasproductoEntity();
                 pedhasprod.setCantidad(prodCart.getCantidad());
 
                 BigDecimal multiply = prodCart.getProductos().getPreciounitario().multiply(new BigDecimal(prodCart.getCantidad()));
                 pedhasprod.setSubtotal(multiply);
-                PedhasProdID id=new PedhasProdID(pedidoscreado,prodCart.getProductos());
+                PedhasProdID id = new PedhasProdID(pedidoscreado, prodCart.getProductos());
                 pedhasprod.setId(id);
                 pedidoHasProductoRepository.save(pedhasprod);
             }
-            ArrayList<ProductoCarrito> cartemp =new ArrayList<>();
-            session.setAttribute("cart",cartemp);
-            session.setAttribute("numcart",0);
+            ArrayList<ProductoCarrito> cartemp = new ArrayList<>();
+            session.setAttribute("cart", cartemp);
+            session.setAttribute("numcart", 0);
             att.addFlashAttribute("msgsuccess", "Compra exitosa");
         } catch (Exception e) {
             att.addFlashAttribute("msgerror", "Ups! Parece que la tarjeta no es válida");
             return "redirect:/usuario/checkout";
         }
-        return "redirect:/pedidos/";
+        return "redirect:/";
     }
 
     private String generacod(LocalDateTime today) {
