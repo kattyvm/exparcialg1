@@ -108,11 +108,7 @@
                                         <li sec:authorize="hasAuthority('Gestor')"><a
                                                 th:href="@{/gestor/listaProdGestion/}">Gestión de Productos</a>
                                         </li>
-                                        <li sec:authorize="hasAuthority('Gestor')"><a th:href="@{/blog.html}">Estadísticas</a>
-                                            <ul class="submenu">
-                                                <li><a th:href="@{/blog.html}">Blog</a></li>
-                                                <li><a th:href="@{/blog-details.html}">Blog Details</a></li>
-                                            </ul>
+                                        <li sec:authorize="hasAuthority('Gestor')"><a th:href="@{/gestor/estadisticas}">Estadísticas</a>
                                         </li>
                                         <li sec:authorize="hasAuthority('Administrador')"><a th:href="@{/admin/listGestor/}">Gestores</a>
                                             <ul class="submenu">
