@@ -11,14 +11,8 @@ import java.util.List;
 @Repository
 public interface PedidoHasProductoRepository extends JpaRepository<PedidohasproductoEntity, PedhasProdID> {
 
-    @Query(value="SELECT codpedido,codproducto\n" +
-            "FROM donpepe.pedidohasproductos\n" +
-            "WHERE codproducto =?1",nativeQuery = true)
-    List<PedidohasproductoEntity> buscarPedidosPorProducto(String codproducto);
-
-    @Query(value="SELECT * \n" +
-            "FROM pedidohasproductos\n" +
-            "WHERE codpedido=?1",nativeQuery=true)
+    @Query(value="SELECT * FROM pedidohasproductos\n" +
+            "WHERE codproducto=?1",nativeQuery=true)
     List<PedidohasproductoEntity> buscarProductos(String codproducto);
 
 }

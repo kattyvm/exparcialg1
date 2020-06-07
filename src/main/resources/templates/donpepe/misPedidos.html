@@ -16,7 +16,7 @@
                         <h2 class="mt-5">Mis Pedidos</h2>
                         <div class="whole-wrap">
                             <div class="container mx-auto">
-                                
+
                                 <div th:if="${msgsuccess != null}" th:text="${msgsuccess}"
                                      class="alert alert-success py-1"
                                      role="alert"></div>
@@ -24,6 +24,17 @@
                                      role="alert"></div>
                             </div>
                         </div>
+
+                        <div class="whole-wrap">
+                            <div class="container mx-auto">
+                                <form method="post" th:action="@{/pedidos/buscarPedidoPorCod}">
+                                    <input name="buscador" class="form-control mb-3" type="text" placeholder="Buscar por categoria"/>
+                                </form>
+                                <a th:if="${buscador!=null}" th:href="@{/pedidos/}" class="btn btn-danger mt-4 mb-4" >Volver a mostrar la lista completa</a>
+                            </div>
+                        </div>
+
+
                         <div th:if="${msgEmpty == null}" class="table-responsive mt-4">
                             <div  class="table-responsive">
                                 <table  class="table">
