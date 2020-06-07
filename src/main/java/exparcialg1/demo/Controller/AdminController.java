@@ -4,13 +4,10 @@ import exparcialg1.demo.Entity.RolesEntity;
 import exparcialg1.demo.Entity.UsuariosEntity;
 import exparcialg1.demo.Repository.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -18,6 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+
 
 @Controller
 @RequestMapping(value = "/admin")
@@ -103,13 +101,13 @@ public class AdminController {
             roles.setIdroles(2);
             usuarios.setRol(roles);
             usuarios.setEnabled(false);
-            //String pwd = "abcdef";
-            //usuarios.setPwd(pwd);
+            String pass = GeneratePwd.getAlphaString(8) + GeneratePwd.getAlphaNumeric(2);
+            String passEncrypt = new BCryptPasswordEncoder().encode(pass);
+            usuarios.setPwd(passEncrypt);
             attr.addFlashAttribute("msg", "Gestor creado exitosamente");
 
         } else {
             attr.addFlashAttribute("msg", "Gestor actualizado exitosamente");
-            //usuarios.setPwd(usuarios.getPwd());
             Optional<UsuariosEntity> opt = usuariosRepository.findById(usuarios.getIdusuarios());
 
             if (dominio==1) {
@@ -119,7 +117,7 @@ public class AdminController {
                 String mail = usuarios.getCorreo();
                 usuarios.setCorreo(mail + "@pucp.pe");
             }
-
+            usuarios.setPwd(opt.get().getPwd());
             usuarios.setEnabled(opt.get().getEnabled());
             usuarios.setRol(opt.get().getRol());
         }
