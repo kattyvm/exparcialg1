@@ -72,6 +72,7 @@ public class PedidosController {
         if (listacompleta2.size()==0) {
             model.addAttribute("msgEmpty", "No se ha encontrado la busqueda");
         }
+        model.addAttribute("buscador",buscador);
         model.addAttribute("listaProductosPorPedidos",listacompleta2);
         model.addAttribute("listaMisPedidos",listaMisPedidos);
         return "donpepe/misPedidos";

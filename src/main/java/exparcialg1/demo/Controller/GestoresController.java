@@ -41,6 +41,8 @@ public class GestoresController {
         return "donpepe/index";
     }
 
+
+
     @GetMapping(value = "listaProdGestion")
     public String listaProdDispPaginaPrincipal(Model model) {
         model.addAttribute("listaProductos", productosRepository.findAll());
