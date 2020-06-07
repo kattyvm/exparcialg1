@@ -34,6 +34,41 @@
                 background: red;
                 color: white;
             }
+            .btn_1:hover {
+                background-color: #fff;
+                color: #012f5f;
+            }
+            .btncartdanger {
+                background-color: red;
+                
+            }
+            .cart_area .btncartdanger:hover {
+                background-color: #fff;
+                color: #d52929;
+                border: 1px solid #d52929 !important;
+                border-top-color: rgb(213, 41, 41) !important;
+                border-top-style: solid !important;
+                border-top-width: 1px !important;
+                border-right-color: rgb(213, 41, 41) !important;
+                border-right-style: solid !important;
+                border-right-width: 1px !important;
+                border-bottom-color: rgb(213, 41, 41) !important;
+                border-bottom-style: solid !important;
+                border-bottom-width: 1px !important;
+                border-left-color: rgb(213, 41, 41) !important;
+                border-left-style: solid !important;
+                border-left-width: 1px !important;
+                border-image-source: initial !important;
+                border-image-slice: initial !important;
+                border-image-width: initial !important;
+                border-image-outset: initial !important;
+                border-image-repeat: initial !important;
+            }
+            input[type=number]::-webkit-inner-spin-button,
+            input[type=number]::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
         </style>
     </head>
     <body>
@@ -44,7 +79,7 @@
                 <div class="preloader-inner position-relative">
                     <div class="preloader-circle"></div>
                     <div class="preloader-img pere-text">
-                        <img th:src="@{assets/img/logo/logo.png}" alt="">
+                        <img th:src="@{/assets/img/logo/logo.png}" alt="">
                     </div>
                 </div>
             </div>
