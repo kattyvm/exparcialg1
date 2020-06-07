@@ -1,6 +1,8 @@
 package exparcialg1.demo.Controller;
 
+import exparcialg1.demo.Entity.PedidohasproductoEntity;
 import exparcialg1.demo.Entity.ProductosEntity;
+import exparcialg1.demo.Repository.PedidoHasProductoRepository;
 import exparcialg1.demo.Repository.ProductosRepository;
 import exparcialg1.demo.Repository.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class GestoresController {
     UsuariosRepository usuariosRepository;
     @Autowired
     ProductosRepository productosRepository;
+    @Autowired
+    PedidoHasProductoRepository pedidoHasProductoRepository;
 
     @GetMapping(value = {"listaProdDispPaginaPrincipal", "/"})
     public String listaProdDispGestion(Model model) {
@@ -116,5 +120,19 @@ public class GestoresController {
         }
     }
 
+    @GetMapping("/borrar")
+    public String borrarProducto( @ModelAttribute("producto") ProductosEntity producto, Model model,
+                                  @RequestParam("id") String id, RedirectAttributes attr) {
+
+        List<PedidohasproductoEntity> listaPedidosPorProducto = pedidoHasProductoRepository.buscarPedidosPorProducto(id);
+
+        if(listaPedidosPorProducto.isEmpty()){
+            productosRepository.deleteById(id);
+            attr.addFlashAttribute("msg", "Producto borrado exitosamente");
+        } else{
+            attr.addFlashAttribute("msgNoBorrado", "No se puede borrar un producto que ya ha sido comprado por un usuario");
+        }
+        return "redirect:/gestor/listaProdGestion";
+    }
 
 }
