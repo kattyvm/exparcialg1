@@ -40,4 +40,5 @@ public class PedidohasproductoEntity {
     public void setSubtotal(BigDecimal subtotal) {
         this.subtotal = subtotal;
     }
+
 }

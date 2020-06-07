@@ -26,6 +26,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true);
 
+        http.rememberMe()
+                .tokenValiditySeconds(172800)
+                .rememberMeParameter("rememberme");
+
         http.authorizeRequests().antMatchers("/admin","/admin/**").hasAuthority("Administrador")
                 .antMatchers("/gestor","/gestor/**").hasAnyAuthority("Gestor")
                 .antMatchers("/usuario","/usuario/**").hasAnyAuthority("Administrador","Gestor","Registrado")
