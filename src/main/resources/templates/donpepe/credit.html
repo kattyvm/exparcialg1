@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="navbar/navbar.html :: cabecera(title='Checkout')">
+    </head>
+    
+    <body>
+        <header th:replace="navbar/navbar.html:: topbar(num=${num})">
+        </header>
+        <main>
+            
+            <!--? Preloader Start >
+            <div th:replace="navbar/navbar.html:: preloader"></div>
+            <================Cart Area =================-->
+            
+            <section class="checkout_area">
+                <div class="container">
+                    <div class="cart_inner">
+                        <h2>Checkout</h2>
+                        
+                        <div class="whole-wrap">
+                            <div class="container mx-auto">
+                                <div th:if="${msgerror != null}" th:text="${msgerror}" class="alert alert-danger py-1"
+                                     role="alert"></div>
+                                <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success py-1"
+                                     role="alert"></div>
+                            </div>
+                        </div>
+                        <p>
+                            Ingrese su tarjeta:
+                        </p>
+                        <div class="whole-wrap">
+                            <form class="row contact_form" th:action="@{/usuario/pay}" method="post">
+                                <div class="col-md-6 form-group p_star">
+                                    <input type="text" required max="9999999999999999"
+                                           oninvalid="this.setCustomValidity('Número de tarjeta no válido')"
+                                           oninput="this.setCustomValidity('')" class="form-control" id="name"
+                                           name="ccnumber"/>
+                                </div>
+                                
+                                <div class="col-md-12 form-group">
+                                    <button type="submit" value="submit" class="btn_1">
+                                        Pagar
+                                    </button>
+                                
+                                </div>
+                            </form>
+                        </div>
+                    
+                    </div>
+                </div>
+            </section>
+            <!--================End Cart Area =================-->
+        </main>
+        
+        
+        <!-- JS here -->
+        
+        <div th:replace="navbar/navbar.html:: jscript"></div>
+    
+    </body>
+</html>
