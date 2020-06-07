@@ -29,22 +29,24 @@ public class PedidosController {
     PedidoHasProductoRepository pedidoHasProductoRepository;
 
     @GetMapping("/")
-    public String productosPorConfirmar(HttpSession session, Model model){
+    public String productosPorConfirmar(HttpSession session, Model model) {
         UsuariosEntity usuario = (UsuariosEntity) session.getAttribute("usuario");
         List<PedidosEntity> listaMisPedidos = pedidosRepository.buscarPorUsuario(usuario.getIdusuarios());
 
-        ArrayList<PedidohasproductoEntity> listacompleta=new ArrayList<>();
+        ArrayList<PedidohasproductoEntity> listacompleta = new ArrayList<>();
         for (PedidosEntity pedido : listaMisPedidos) {
-            List<PedidohasproductoEntity> pedidohasproductoEntities1= pedidoHasProductoRepository.buscarProductos(pedido.getCodpedido());
+            List<PedidohasproductoEntity> pedidohasproductoEntities1 = pedidoHasProductoRepository.buscarProductos(pedido.getCodpedido());
 
-            for (PedidohasproductoEntity phprod :pedidohasproductoEntities1){
+            for (PedidohasproductoEntity phprod : pedidohasproductoEntities1) {
                 listacompleta.add(phprod);
             }
 
         }
-
-        model.addAttribute("listaProductosPorPedidos",listacompleta);
-        model.addAttribute("listaMisPedidos",listaMisPedidos);
+        if (listacompleta.size()==0) {
+            model.addAttribute("msgEmpty", "No tienes pedidos aún");
+        }
+        model.addAttribute("listaProductosPorPedidos", listacompleta);
+        model.addAttribute("listaMisPedidos", listaMisPedidos);
         return "donpepe/misPedidos";
     }
 

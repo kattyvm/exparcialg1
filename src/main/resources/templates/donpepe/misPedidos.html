@@ -20,12 +20,13 @@
                                 <div th:if="${msgsuccess != null}" th:text="${msgsuccess}"
                                      class="alert alert-success py-1"
                                      role="alert"></div>
-                                
+                                <div th:if="${msgEmpty != null}" th:text="${msgEmpty}" class="alert alert-warning py-1"
+                                     role="alert"></div>
                             </div>
                         </div>
-                        <div class="table-responsive mt-4">
+                        <div th:if="${msgEmpty == null}" class="table-responsive mt-4">
                             <div  class="table-responsive">
-                                <table class="table">
+                                <table  class="table">
                                     <thead>
                                         <tr>
                                             <th scope="col">Codigo de pedido</th>
@@ -67,18 +68,9 @@
             </section>
             <!--================End Cart Area =================-->
         </main>
-        >
+        
 
-        <!--? Search model Begin -->
-        <div class="search-model-box">
-            <div class="h-100 d-flex align-items-center justify-content-center">
-                <div class="search-close-btn">+</div>
-                <form class="search-model-form">
-                    <input type="text" id="search-input" placeholder="Searching key.....">
-                </form>
-            </div>
-        </div>
-        <!-- Search model end -->
+        
 
         <!-- JS here -->
         <div th:replace="navbar/navbar.html :: footer"></div>
