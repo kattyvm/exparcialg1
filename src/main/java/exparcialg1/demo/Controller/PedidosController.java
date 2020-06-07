@@ -37,6 +37,7 @@ public class PedidosController {
 
         ArrayList<PedidohasproductoEntity> listacompleta = new ArrayList<>();
         for (PedidosEntity pedido : listaMisPedidos) {
+
             List<PedidohasproductoEntity> pedidohasproductoEntities1 = pedidoHasProductoRepository.buscarProductos(pedido.getCodpedido());
 
             for (PedidohasproductoEntity phprod : pedidohasproductoEntities1) {
@@ -44,6 +45,7 @@ public class PedidosController {
             }
 
         }
+
         if (listacompleta.size()==0) {
             model.addAttribute("msgEmpty", "No tienes pedidos aún");
         }

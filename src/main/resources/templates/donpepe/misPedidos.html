@@ -25,7 +25,7 @@
                             </div>
                         </div>
 
-                        <div class="whole-wrap">
+                        <div th:if="${msgEmpty == null}" class="whole-wrap">
                             <div class="container mx-auto">
                                 <form method="post" th:action="@{/pedidos/buscarPedidoPorCod}">
                                     <input name="buscador" class="form-control mb-3" type="text" placeholder="Buscar por categoria"/>

@@ -12,7 +12,7 @@ import java.util.List;
 public interface PedidoHasProductoRepository extends JpaRepository<PedidohasproductoEntity, PedhasProdID> {
 
     @Query(value="SELECT * FROM pedidohasproductos\n" +
-            "WHERE codproducto=?1",nativeQuery=true)
+            "WHERE codpedido=?1",nativeQuery=true)
     List<PedidohasproductoEntity> buscarProductos(String codproducto);
 
 }
