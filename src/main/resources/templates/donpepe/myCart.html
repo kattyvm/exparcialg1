@@ -20,9 +20,12 @@
                                      role="alert"></div>
                                 <div th:if="${msgsuccess != null}" th:text="${msgsuccess}" class="alert alert-success py-1"
                                      role="alert"></div>
+                                <div th:if="${msgEmpty != null}" th:text="${msgEmpty}" class="alert alert-warning py-1"
+                                     role="alert"></div>
                             </div>
                         </div>
                         <div class="table-responsive mt-4">
+                        <div th:if="${msgEmpty==null}" class="table-responsive">
                             <table class="table">
                                 <thead>
                                     <tr>

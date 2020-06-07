@@ -88,7 +88,7 @@ public class UsuariosController {
     @GetMapping(value = {"/myCart"})
     public String viewCart(HttpSession session, Model m) {
         ArrayList<ProductoCarrito> cart = (ArrayList<ProductoCarrito>) session.getAttribute("cart");
-        if (cart.size()==0) {
+        if (cart.size()!=0) {
             boolean validCart = validateCart(cart, session, m);
             m.addAttribute("path", "A0006I.jpg");
 
@@ -100,6 +100,8 @@ public class UsuariosController {
                 total = total.add(prodCart.getProductos().getPreciounitario().multiply(cant));
             }
             m.addAttribute("total", total);
+        }else{
+            m.addAttribute("msgEmpty", "Ups! Parece que no tienes productos en tu carrito");
         }
 
 
@@ -178,6 +180,10 @@ public class UsuariosController {
     @PostMapping(value = {"/pay"})
     public String pay(@RequestParam("ccstr") String ccstr, RedirectAttributes att, HttpSession session, Model m) {
         att.addFlashAttribute("ccstr", ccstr);
+        ArrayList<ProductoCarrito> cart = (ArrayList<ProductoCarrito>) session.getAttribute("cart");
+        if (cart.size() == 0) {
+            return "redirect:/usuario/myCart";
+        }
 
 
         try {
@@ -193,7 +199,7 @@ public class UsuariosController {
                 }
 
             }
-            ArrayList<ProductoCarrito> cart = (ArrayList<ProductoCarrito>) session.getAttribute("cart");
+
             boolean validCart = validateCart(cart, session, m);
             if (!validCart) {
                 return "redirect:/usuario/myCart";
