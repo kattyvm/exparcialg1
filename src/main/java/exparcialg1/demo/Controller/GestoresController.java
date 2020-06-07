@@ -3,6 +3,7 @@ package exparcialg1.demo.Controller;
 import exparcialg1.demo.Entity.PedidohasproductoEntity;
 import exparcialg1.demo.Entity.ProductosEntity;
 import exparcialg1.demo.Repository.PedidoHasProductoRepository;
+import exparcialg1.demo.Repository.PedidosRepository;
 import exparcialg1.demo.Repository.ProductosRepository;
 import exparcialg1.demo.Repository.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ public class GestoresController {
     UsuariosRepository usuariosRepository;
     @Autowired
     ProductosRepository productosRepository;
+    @Autowired
+    PedidosRepository pedidosRepository;
     @Autowired
     PedidoHasProductoRepository pedidoHasProductoRepository;
 
@@ -151,4 +154,20 @@ public class GestoresController {
         }
         return "redirect:/gestor/listaProdGestion";
     }
+
+    //Estadisticas
+    @GetMapping("estadisticas")
+    public String estadisticas(Model model){
+        model.addAttribute("cantidadCompras",pedidosRepository.obtenerCantCompras());
+        model.addAttribute("totalFacturado",pedidosRepository.obtenerTotalFacturado());
+        model.addAttribute("cantidadProductosVendidos",productosRepository.obtenerCantprodvendidos());
+        model.addAttribute("listaProductoMasVendido",productosRepository.obtenerProductoMasVendido());
+        model.addAttribute("listaProductoMenosVendido",productosRepository.obtenerProductoMenosVendido());
+        model.addAttribute("listaProductoMasCaro",productosRepository.obtenerProdMasCaro());
+        model.addAttribute("listaUsuarioQueGastoMas",usuariosRepository.obtenerUsuarioQueGastoMas());
+        return "gestor/estadisticas";
+    }
+
+
+
 }

@@ -1,10 +1,160 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="navbar/navbar.html :: cabecera(title='Estadisticas')">
     </head>
     <body>
-        
+
+        <header th:replace="navbar/navbar.html:: topbar(num=${0})">
+        </header>
+        <div class="container mt-5">
+            <h2 class="mt-5">Estadisticas de Pedidos</h2>
+            <table class="col-lg-5 table mt-4">
+                <thead>
+                    <tr>
+                        <th  class="table-warning">#</th>
+                        <th class="text-center table-warning">Total Facturado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td class="text-center" th:text="'S/. '+ ${totalFacturado}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="col-lg-5 table mt-30 table-borderless">
+                <thead>
+                    <tr>
+                        <th class="table-warning">#</th>
+                        <th class="text-center table-warning">Cantidad de compras realizadas por los usuarios</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td class="text-center" th:text="${cantidadCompras}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <h2 class="mt-5">Estadisticas de Productos</h2>
+            <table class="col-lg-5 table mt-4 table-borderless">
+                <thead>
+                    <tr>
+                        <th class="table-info">#</th>
+                        <th class="text-center table-info">Cantidad de productos vendidos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td class="text-center" th:text="${cantidadProductosVendidos}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table mt-20">
+                <thead>
+                    <tr>
+                        <th class="table-info">#</th>
+                        <th class="table-info">Codigo</th>
+                        <th class="table-info">Nombre</th>
+                        <th class="table-info">Precio unitario</th>
+                        <th class="table-info">Stock</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="pmc, i : ${listaProductoMasCaro}">
+                        <td th:text="${i.index +1}"></td>
+                        <td th:text="${pmc.codproducto}"></td>
+                        <td th:text="${pmc.nombre}"></td>
+                        <td th:text="'S/. '+ ${pmc.preciounitario}"></td>
+                        <td th:text="${pmc.stock}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table mt-30">
+                <thead>
+                    <tr>
+                        <th class="table-info">#</th>
+                        <th class="table-info">Codigo</th>
+                        <th class="table-info">Nombre</th>
+                        <th class="table-info">Precio unitario</th>
+                        <th class="table-info">Stock</th>
+                        <th class="table-info">Cantidad vendida</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="pmv, i : ${listaProductoMasVendido}">
+                        <td th:text="${i.index +1}"></td>
+                        <td th:text="${pmv.codproducto}"></td>
+                        <td th:text="${pmv.nombre}"></td>
+                        <td th:text="'S/. '+ ${pmv.preciounitario}"></td>
+                        <td th:text="${pmv.stock}"></td>
+                        <td th:text="${pmv.cantidadvendida}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table mt-30">
+                <thead>
+                    <tr>
+                        <th class="table-info">#</th>
+                        <th class="table-info">Codigo</th>
+                        <th class="table-info">Nombre</th>
+                        <th class="table-info">Precio unitario</th>
+                        <th class="table-info">Stock</th>
+                        <th class="table-info">Cantidad vendida</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="pmv, i : ${listaProductoMenosVendido}">
+                        <td th:text="${i.index +1}"></td>
+                        <td th:text="${pmv.codproducto}"></td>
+                        <td th:text="${pmv.nombre}"></td>
+                        <td th:text="'S/. '+ ${pmv.preciounitario}"></td>
+                        <td th:text="${pmv.stock}"></td>
+                        <td th:text="${pmv.cantidadvendida}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <h2 class="mt-5">Estadisticas de Usuarios</h2>
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        <th class="table-danger">#</th>
+                        <th class="table-danger">Nombre y Apellido</th>
+                        <th class="table-danger">DNI</th>
+                        <th class="table-danger">Correo electronico</th>
+                        <th class="table-danger">Total gastado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="uqgm, i : ${listaUsuarioQueGastoMas}">
+                        <td th:text="${i.index +1}"></td>
+                        <td th:text="${uqgm.nombre} + ' ' +${uqgm.apellido}"></td>
+                        <td th:text="${uqgm.dni}"></td>
+                        <td th:text="${uqgm.correo}"></td>
+                        <td th:text="'S/. '+ ${uqgm.totalgastado}"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+
+
+        <!--? Search model Begin -->
+        <div class="search-model-box">
+            <div class="h-100 d-flex align-items-center justify-content-center">
+                <div class="search-close-btn">+</div>
+                <form class="search-model-form">
+                    <input type="text" id="search-input" placeholder="Searching key.....">
+                </form>
+            </div>
+        </div>
+        <!-- Search model end -->
+
+        <div th:replace="navbar/navbar.html :: footer"></div>
+
+        <div th:replace="navbar/navbar.html:: jscript"></div>
     </body>
+
 </html>
