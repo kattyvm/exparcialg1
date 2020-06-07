@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ public class PedidosController {
     PedidoHasProductoRepository pedidoHasProductoRepository;
 
     @GetMapping("/")
-    public String productosPorConfirmar(HttpSession session, Model model) {
+    public String productosPorPedido(HttpSession session, Model model) {
         UsuariosEntity usuario = (UsuariosEntity) session.getAttribute("usuario");
         List<PedidosEntity> listaMisPedidos = pedidosRepository.buscarPorUsuario(usuario.getIdusuarios());
 
@@ -50,5 +52,27 @@ public class PedidosController {
         return "donpepe/misPedidos";
     }
 
+
+    @PostMapping(value="buscarPedidoPorCod")
+    public String buscarPedidoPorCod(HttpSession session,@RequestParam("buscador") String buscador, Model model){
+        UsuariosEntity usuario = (UsuariosEntity) session.getAttribute("usuario");
+        List<PedidosEntity> listaMisPedidos = pedidosRepository.buscarPedidoPorCodigoPedido(buscador,usuario.getIdusuarios());
+
+        ArrayList<PedidohasproductoEntity> listacompleta2 = new ArrayList<>();
+        for (PedidosEntity pedido : listaMisPedidos) {
+            List<PedidohasproductoEntity> pedidohasproductoEntities1= pedidoHasProductoRepository.buscarProductos(pedido.getCodpedido());
+
+            for (PedidohasproductoEntity phprod :pedidohasproductoEntities1){
+                listacompleta2.add(phprod);
+            }
+
+        }
+        if (listacompleta2.size()==0) {
+            model.addAttribute("msgEmpty", "No se ha encontrado la busqueda");
+        }
+        model.addAttribute("listaProductosPorPedidos",listacompleta2);
+        model.addAttribute("listaMisPedidos",listaMisPedidos);
+        return "donpepe/misPedidos";
+    }
 
 }

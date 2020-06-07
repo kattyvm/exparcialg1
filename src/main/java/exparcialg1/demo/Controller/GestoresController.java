@@ -144,7 +144,7 @@ public class GestoresController {
     public String borrarProducto( @ModelAttribute("producto") ProductosEntity producto, Model model,
                                   @RequestParam("id") String id, RedirectAttributes attr) {
 
-        List<PedidohasproductoEntity> listaPedidosPorProducto = pedidoHasProductoRepository.buscarPedidosPorProducto(id);
+        List<PedidohasproductoEntity> listaPedidosPorProducto = pedidoHasProductoRepository.buscarProductos(id);
         if(listaPedidosPorProducto.isEmpty()){
             productosRepository.deleteById(id);
             attr.addFlashAttribute("msg", "Producto borrado exitosamente");
