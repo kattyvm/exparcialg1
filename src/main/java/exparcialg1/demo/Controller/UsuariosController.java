@@ -252,12 +252,12 @@ public class UsuariosController {
             ArrayList<ProductoCarrito> cartemp =new ArrayList<>();
             session.setAttribute("cart",cartemp);
             session.setAttribute("numcart",0);
-
+            att.addFlashAttribute("msgsuccess", "Compra exitosa");
         } catch (Exception e) {
             att.addFlashAttribute("msgerror", "Ups! Parece que la tarjeta no es válida");
             return "redirect:/usuario/checkout";
         }
-        return "redirect:/";
+        return "redirect:/pedidos/";
     }
 
     private String generacod(LocalDateTime today) {
