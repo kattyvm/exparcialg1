@@ -4,12 +4,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.validation.constraints.*;
 
 @Entity
 @Table(name="productos")
-public class ProductosEntity {
+public class ProductosEntity implements Serializable {
 
     @Id
     @Column(nullable = false)

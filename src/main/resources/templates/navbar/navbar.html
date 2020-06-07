@@ -67,7 +67,7 @@
                                 <nav>
                                     <ul id="navigation">
                                         <li><a th:href="@{/}">Productos</a></li>
-                                        <li><a th:href="@{/shop.html}">Tu Carrito</a></li>
+                                        
                                         <li sec:authorize="isAuthenticated()"><a th:href="@{/about.html}">Tus
                                             Pedidos</a></li>
                                         <li sec:authorize="hasAuthority('Gestor')"><a
@@ -109,10 +109,15 @@
             
                                             <a th:href="@{/cart.html}"><span
                                                     class="flaticon-shopping-cart"><span class="num"
-                                                                                         th:if="${num>0}"
-                                                                                         th:text="${num}">3</span><span
-                                                    th:text="|${session.usuario.nombre} ${session.usuario.apellido}|"></span></span></a>
+                                                                                         th:if="${session.numcart>0}"
+                                                                                         th:text="${session.numcart}">3</span></span></a>
                                             
+                                        </li>
+                                        <li>
+        
+                                            <a ><span
+                                                    th:text="|${session.usuario.nombre} ${session.usuario.apellido}|"></span></a>
+    
                                         </li>
                                     </ul>
                                     <form th:action="@{/logout}" method="post">
